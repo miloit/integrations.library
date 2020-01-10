@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright (C) 2019 Christian Riedl <ric@rts.co.at>
+ * Copyright (C) 2018-2019 Marton Borzak <hello@martonborzak.com>
  *
  * This file is part of the YIO-Remote software project.
  *
@@ -20,38 +20,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#ifndef WEATHERMODEL_H
-#define WEATHERMODEL_H
+#pragma once
 
-#include <QObject>
-#include <QAbstractListModel>
-#include "../remote-software/sources/entities/weatherinterface.h"
+#include <QString>
+#include <QTranslator>
+#include <QVariantMap>
 
-class WeatherModel : public QAbstractListModel
-{
+// This interface is implemented by the integration .so files, it is used by the entities to operate the integration
+class PluginInterface : public QObject {
     Q_OBJECT
-public:
-    enum BrowseRoles {
-        DateRole = Qt::UserRole + 1,
-        DescriptionRole, ImageUrlRole, TempRole, RainRole, SnowRole, WindRole, HumidityRole  };
 
-    explicit WeatherModel(QObject* parent = nullptr);
+ public:
+    virtual ~PluginInterface() {}
 
-    void addItems       (const QList<WeatherItem>& items);
+    // create an integration and return the object
+    virtual void create(const QVariantMap &configurations, QObject *entities, QObject *notifications, QObject *api,
+                        QObject *configObj) = 0;
 
-    int  rowCount       (const QModelIndex& parent = QModelIndex()) const
-    {
-        Q_UNUSED(parent)
-        return _items.count();
-    }
-    void clear          ();
-    QVariant data       (const QModelIndex& index, int role = Qt::DisplayRole) const;
+    // enable log category
+    virtual void setLogEnabled(QtMsgType msgType, bool enable) = 0;
 
-protected:
-    QHash<int, QByteArray> roleNames() const;
-
-private:
-    QList<WeatherItem>    _items;
+ signals:
+    void createDone(QMap<QObject *, QVariant> map);
 };
 
-#endif // WEATHERMODEL_H
+QT_BEGIN_NAMESPACE
+#define PluginInterface_iid "YIO.PluginInterfaceInterface"
+Q_DECLARE_INTERFACE(PluginInterface, PluginInterface_iid)
+QT_END_NAMESPACE

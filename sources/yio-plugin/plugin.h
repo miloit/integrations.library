@@ -20,32 +20,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#pragma once
 
-#include <QObject>
 #include <QLoggingCategory>
+#include <QObject>
 
-#include "../remote-software/sources/integrations/plugininterface.h"
+#include "yio-interface/plugininterface.h"
 
 class Integration;
-class Plugin : public PluginInterface
-{
+class Plugin : public PluginInterface {
     friend class Integration;
 
-    //Q_OBJECT
+    // Q_OBJECT
     Q_INTERFACES(PluginInterface)
-public:
+
+ public:
     explicit Plugin(const char* pluginName, bool useWorkerThread);
 
-    virtual void            create            (const QVariantMap& config, QObject *entities, QObject *notifications, QObject* api, QObject *configObj) override;
-    virtual void            setLogEnabled     (QtMsgType msgType, bool enable) override;
+    virtual void create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
+                        QObject* configObj) override;
+    virtual void setLogEnabled(QtMsgType msgType, bool enable) override;
 
-protected:
-    virtual Integration*    createIntegration (const QVariantMap& config, QObject *entities, QObject *notifications, QObject* api, QObject *configObj);
+ protected:
+    virtual Integration* createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
+                                           QObject* api, QObject* configObj);
 
-    QLoggingCategory        m_log;
-    bool                    m_useWorkerThread;
+    QLoggingCategory m_logCategory;
+    bool             m_useWorkerThread;
 };
-
-#endif // PLUGIN_H

@@ -21,25 +21,19 @@
  *****************************************************************************/
 
 #include <QDebug>
-#include "plugin.h"
-#include "integration.h"
+
 #include "integrationproxy.h"
+#include "yio-plugin/integration.h"
+#include "plugin.h"
 
-PluginInterface::~PluginInterface()
-{
-}
+Plugin::Plugin(const char* pluginName, bool useWorkerThread) : m_logCategory(pluginName), m_useWorkerThread(useWorkerThread) {}
 
-Plugin::Plugin(const char* pluginName, bool useWorkerThread) :
-    m_log(pluginName),
-    m_useWorkerThread(useWorkerThread)
-{
-}
-void Plugin::create (const QVariantMap& config, QObject *entities, QObject *notifications, QObject* api, QObject *configObj)
-{
-    QMap<QObject *, QVariant> returnData;
+void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
+                    QObject* configObj) {
+    QMap<QObject*, QVariant> returnData;
 
     QVariantList data;
-    QString mdns;
+    QString      mdns;
 
     for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
         if (iter.key() == "mdns") {
@@ -51,34 +45,31 @@ void Plugin::create (const QVariantMap& config, QObject *entities, QObject *noti
         }
     }
 
-    for (int i = 0; i < data.length(); i++)
-    {
+    for (int i = 0; i < data.length(); i++) {
         Integration* integration = createIntegration(data[i].toMap(), entities, notifications, api, configObj);
-        QVariantMap d = data[i].toMap();
+        QVariantMap  d = data[i].toMap();
         d.insert("mdns", mdns);
         d.insert("type", config.value("type").toString());
         if (m_useWorkerThread) {
             // Create Proxy
-            IntegrationProxy* integrationProxy = new IntegrationProxy (*integration, this);
+            IntegrationProxy* integrationProxy = new IntegrationProxy(*integration, this);
             returnData.insert(integrationProxy, d);
-        }
-        else {
+        } else {
             returnData.insert(integration, d);
         }
     }
     emit createDone(returnData);
 }
-void Plugin::setLogEnabled (QtMsgType msgType, bool enable)
-{
-    m_log.setEnabled(msgType, enable);
-}
-Integration* Plugin::createIntegration (const QVariantMap& config, QObject *entities, QObject *notifications, QObject* api, QObject *configObj)
-{
+
+void Plugin::setLogEnabled(QtMsgType msgType, bool enable) { m_logCategory.setEnabled(msgType, enable); }
+
+Integration* Plugin::createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
+                                       QObject* api, QObject* configObj) {
     Q_UNUSED(config)
     Q_UNUSED(entities)
     Q_UNUSED(notifications)
     Q_UNUSED(api)
     Q_UNUSED(configObj)
-    Q_ASSERT(false);    // Must be overriden
+    Q_ASSERT(false);  // Must be overriden
     return nullptr;
 }

@@ -22,9 +22,12 @@
 
 #include "integrationproxy.h"
 
+// FIXME quick and dirty workaround until logging integration is fixed
+static Q_LOGGING_CATEGORY(CLASS_LC, "integration.threadAdapter");
+
 IntegrationProxy::IntegrationProxy (Integration& integration, Plugin* plugin) :
-    Integration(plugin),
-    m_integrationThread(integration)
+//    Integration(plugin),
+    m_integration(integration)
 {
     setFriendlyName(integration.friendlyName());
     setIntegrationId(integration.integrationId());
@@ -54,34 +57,34 @@ IntegrationProxy::~IntegrationProxy()
 }
 void IntegrationProxy::connect ()
 {
-    qCDebug(m_log) << "Proxy connect";
+    qCDebug(CLASS_LC) << "Proxy connect";
     emit connectSignal();
 }
 void IntegrationProxy::disconnect ()
 {
-    qCDebug(m_log) << "Proxy disconnect";
+    qCDebug(CLASS_LC) << "Proxy disconnect";
     emit disconnectSignal();
 }
 void IntegrationProxy::enterStandby ()
 {
-    qCDebug(m_log) << "Proxy enterStandby";
+    qCDebug(CLASS_LC) << "Proxy enterStandby";
     emit enterStandbySignal();
 }
 void IntegrationProxy::leaveStandby ()
 {
-    qCDebug(m_log) << "Proxy leaveStandby";
+    qCDebug(CLASS_LC) << "Proxy leaveStandby";
     emit leaveStandbySignal();
 }
 void IntegrationProxy::sendCommand (const QString& type, const QString& entity_id, int command, const QVariant& param)
 {
-    qCDebug(m_log) << "Proxy sendCommand" << type << entity_id << command << param;
+    qCDebug(CLASS_LC) << "Proxy sendCommand" << type << entity_id << command << param;
     emit sendCommandSignal(type, entity_id, command, param);
 }
 // set the state
 void IntegrationProxy::onStateChanged()
 {
-    m_state = m_integrationThread.state();
-    qCDebug(m_log) << "Proxy state changed" << static_cast<States>(m_state);
+    m_state = m_integration.state();
+    //qCDebug(CLASS_LC) << "Proxy state changed" << static_cast<States>(m_state);
     emit stateChanged();
     switch (m_state) {
         case CONNECTING:

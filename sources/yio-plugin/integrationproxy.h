@@ -20,40 +20,42 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#ifndef INTEGRATIONPROXY_H
-#define INTEGRATIONPROXY_H
+#pragma once
 
 #include <QObject>
 #include <QThread>
-#include "integration.h"
-#include "../remote-software/sources/integrations/integrationinterface.h"
+#include "yio-plugin/integration.h"
+#include "yio-interface/integrationinterface.h"
+#include "plugin.h"
 
-class IntegrationProxy : public Integration
-{
+class IntegrationProxy : public Integration {
     Q_OBJECT
-public:
+
+ public:
     explicit IntegrationProxy(Integration& integration, Plugin* parent);
-    ~IntegrationProxy();
+    ~IntegrationProxy() override;
 
-    Q_INVOKABLE void connect	    ();
-    Q_INVOKABLE void disconnect	    ();
-    Q_INVOKABLE void enterStandby   ();
-    Q_INVOKABLE void leaveStandby   ();
-    Q_INVOKABLE void sendCommand    (const QString& type, const QString& entity_id, int command, const QVariant& param);
-
+ public slots:
     // set the state
-    void onStateChanged             ();
+    void onStateChanged();
 
-signals:
-    void connectSignal              ();
-    void disconnectSignal           ();
-    void enterStandbySignal         ();
-    void leaveStandbySignal         ();
-    void sendCommandSignal          (const QString& type, const QString& entity_id, int command, const QVariant& param);
+    // IntegrationInterface
+ public:
+    Q_INVOKABLE void connect() override;
+    Q_INVOKABLE void disconnect() override;
+    Q_INVOKABLE void enterStandby() override;
+    Q_INVOKABLE void leaveStandby() override;
+    Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command,
+                                 const QVariant& param) override;
 
-private:
-    Integration&                    m_integrationThread;
-    QThread                         m_thread;
+ signals:
+    void connectSignal();
+    void disconnectSignal();
+    void enterStandbySignal();
+    void leaveStandbySignal();
+    void sendCommandSignal(const QString& type, const QString& entity_id, int command, const QVariant& param);
+
+ private:
+    Integration& m_integration;
+    QThread      m_thread;
 };
-
-#endif // INTEGRATIONPROXY_H
