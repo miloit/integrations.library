@@ -36,9 +36,9 @@ jobs:
             print(f"{len(upper_files)} files contain uppercase characters:")
             print("\n".join(upper_files) + "\n")
 
-          space_files = [file for file in cpp_files if " " in file or "-" in file]
+          space_files = [file for file in cpp_files if " " in file]
           if space_files:
-            print(f"{len(space_files)} files contain space or dash characters:")
+            print(f"{len(space_files)} files contain space character:")
             print("\n".join(space_files) + "\n")
 
           bad_files = len(upper_files + space_files)
