@@ -50,6 +50,8 @@ class Integration : public QObject, IntegrationInterface {
     Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
 
     void setup(const QVariantMap& config, QObject* entities) {
+        // FIXME remove QVariantMap indirection for friendlyName and integrationId:
+        //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
         for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
             if (iter.key() == "friendly_name")
                 m_friendlyName = iter.value().toString();
