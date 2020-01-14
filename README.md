@@ -34,23 +34,23 @@ Shared weather model classes. This is only required for weather integrations.
 
 ### Environment Setup
 
-To develop a YIO Remote integration plugin this `integrations.library` project needs to be checked out and accessible for the plugin project.  
+To develop a YIO Remote integration plugin this `integrations.library` project needs to be checked out and made accessible for the plugin project.  
 We recommend to check out `integrations.library` on the same level as the plugin project. I.e. the library can be referenced with the default path `../integrations.library`.  
 The only dependency of an integration project is this library. It is the mandatory dependency for plugins as well as the remote-software project.
 
-Example for an imaginary MyKillIntegration plugin:
+Example for an imaginary FooBar plugin:
 
     ~/projects
     └── yio
-        ├── MyKillerIntegration
+        ├── integration.foobar
         ├── integrations.library
         └── remote-software
 
-For other non-standart project setups there's the `YIO_SRC` environment variable. It needs to be initialized to the base directory of the integration project.
+For other non-standard project setups there's the `YIO_SRC` environment variable. It needs to be initialized to the base directory of the integrations.library project.
 
 ### Plugin Project File
 
-Blueprint to include one or more integration project includes into the plugin project:
+Blueprint to include one or more integration Qt project includes into the plugin project:
 
     INTG_LIB_PATH = $$(YIO_SRC)
     isEmpty(INTG_LIB_PATH) {
