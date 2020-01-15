@@ -43,7 +43,7 @@ class Integration : public QObject, IntegrationInterface {
     Q_PROPERTY(QString integrationId READ integrationId WRITE setIntegrationId NOTIFY integrationIdChanged)
     Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName)
 
-    Q_INVOKABLE void connect() = 0;     // Must be implemented by integration
+    Q_INVOKABLE void connect()    = 0;  // Must be implemented by integration
     Q_INVOKABLE void disconnect() = 0;  // Must be implemented by integration
     Q_INVOKABLE void enterStandby() {}  // Can be overriden by integration
     Q_INVOKABLE void leaveStandby() {}  // Can be overriden by integration
@@ -71,8 +71,8 @@ class Integration : public QObject, IntegrationInterface {
         if (state == m_state) {
             return;
         }
-        emit stateChanged();
         m_state = state;
+        emit stateChanged();
         switch (state) {
             case CONNECTING:
                 emit connecting();
