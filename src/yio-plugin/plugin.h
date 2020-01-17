@@ -37,13 +37,14 @@ class Plugin : public PluginInterface {
  public:
     explicit Plugin(const char* pluginName, bool useWorkerThread);
 
-    void create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
-                QObject* configObj) override;
+    void create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                YioAPIInterface* api, ConfigInterface* configObj) override;
     void setLogEnabled(QtMsgType msgType, bool enable) override;
 
  protected:
-    virtual Integration* createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
-                                           QObject* api, QObject* configObj);
+    virtual Integration* createIntegration(const QVariantMap& config, EntitiesInterface* entities,
+                                           NotificationsInterface* notifications, YioAPIInterface* api,
+                                           ConfigInterface* configObj);
 
     QLoggingCategory m_logCategory;
     bool             m_useWorkerThread;

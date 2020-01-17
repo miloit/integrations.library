@@ -26,7 +26,15 @@
 #include <QTranslator>
 #include <QVariantMap>
 
-// This interface is implemented by the integration .so files, it is used by the entities to operate the integration
+#include "configinterface.h"
+#include "entities/entitiesinterface.h"
+#include "notificationsinterface.h"
+#include "yioapiinterface.h"
+
+// FIXME provide complete API documentation with all QML requirements of the implementation!
+/**
+ * @brief The PluginInterface must be implemented by the integration plugins, it is used by the entities to operate the integration.
+ */
 class PluginInterface : public QObject {
     Q_OBJECT
 
@@ -34,9 +42,8 @@ class PluginInterface : public QObject {
     virtual ~PluginInterface() {}
 
     // create an integration and return the object
-    virtual void create(const QVariantMap &configurations, QObject *entities, QObject *notifications, QObject *api,
-                        QObject *configObj) = 0;
-
+    virtual void create(const QVariantMap &config, EntitiesInterface *entities, NotificationsInterface *notifications,
+                        YioAPIInterface *api, ConfigInterface *configObj) = 0;
     // enable log category
     virtual void setLogEnabled(QtMsgType msgType, bool enable) = 0;
 

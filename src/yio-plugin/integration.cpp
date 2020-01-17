@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#include "yio-plugin/integration.h"
+#include "integration.h"
 
 // FIXME redo Integration implementation once the project is cleary separated from remote-software
 // and the common headers are working!
@@ -42,7 +42,7 @@ Integration::Integration(const QVariantMap& config, QObject *entities, QObject *
     m_config = qobject_cast<ConfigInterface *>(configObj);
 }
 
-// Used for proxy
+// Used for integration threading adapter
 Integration::Integration (Plugin* parent) :
     QObject(parent),
     m_state(DISCONNECTED),
@@ -52,4 +52,5 @@ Integration::Integration (Plugin* parent) :
     m_config(nullptr),
     m_log(parent->m_logCategory)
 {}
+
 */

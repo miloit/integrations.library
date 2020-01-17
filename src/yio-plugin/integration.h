@@ -24,32 +24,37 @@
 
 #include <QObject>
 
+#include "plugin.h"
 #include "yio-interface/entities/entitiesinterface.h"
 #include "yio-interface/integrationinterface.h"
 
-// Integration base class
-class Integration : public QObject, IntegrationInterface {
+/**
+ * @brief The Integration class is the base class of an integration plugin defining all required QML accessors.
+ */
+class Integration : public QObject, public IntegrationInterface {
     Q_OBJECT
     Q_INTERFACES(IntegrationInterface)
 
  public:
+    // TODO(mze) default implementation
+    // Integration(const QVariantMap& config, EntitiesInterface *entities, NotificationsInterface *notifications,
+    //             YioAPIInterface* api, ConfigInterface *configObj, Plugin* plugin);
+    // Integration(Plugin* plugin);
     Integration() {}
 
-    enum states { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2 };
-
-    Q_ENUM(states)
-
+    // FIXME do we really need all Q_PROPERTY & Q_INVOKABLE function? E.g. why should QML be able to change the
+    // integrationId?
     Q_PROPERTY(int state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(QString integrationId READ integrationId WRITE setIntegrationId NOTIFY integrationIdChanged)
     Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName)
 
-    Q_INVOKABLE void connect()    = 0;  // Must be implemented by integration
+    Q_INVOKABLE void connect() = 0;     // Must be implemented by integration
     Q_INVOKABLE void disconnect() = 0;  // Must be implemented by integration
     Q_INVOKABLE void enterStandby() {}  // Can be overriden by integration
     Q_INVOKABLE void leaveStandby() {}  // Can be overriden by integration
     Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
 
-    void setup(const QVariantMap& config, QObject* entities) {
+    void setup(const QVariantMap& config, EntitiesInterface* entities) {
         // FIXME remove QVariantMap indirection for friendlyName and integrationId:
         //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
         for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
@@ -58,12 +63,12 @@ class Integration : public QObject, IntegrationInterface {
             else if (iter.key() == "id")
                 m_integrationId = iter.value().toString();
         }
-        m_entities = qobject_cast<EntitiesInterface*>(entities);
+        m_entities = entities;
     }
 
     ~Integration() {}
 
-    // get the if the state
+    // get the state
     int state() { return m_state; }
 
     // set the state
@@ -103,16 +108,23 @@ class Integration : public QObject, IntegrationInterface {
     // set the friendly name of the integration
     void setFriendlyName(QString value) { m_friendlyName = value; }
 
- protected:
-    int                m_state = DISCONNECTED;
-    QString            m_integrationId;
-    QString            m_friendlyName;
-    EntitiesInterface* m_entities;
-
  signals:
     void integrationIdChanged();
     void connected();
     void connecting();
     void disconnected();
     void stateChanged();
+
+ protected:
+    int                m_state = DISCONNECTED;
+    QString            m_integrationId;
+    QString            m_friendlyName;
+    EntitiesInterface* m_entities;
+    /*
+    bool                    m_workerThread;
+    NotificationsInterface* m_notifications;
+    YioAPIInterface*        m_yioapi;
+    ConfigInterface*        m_config;
+    QLoggingCategory&       m_log;
+    */
 };

@@ -24,20 +24,61 @@
 
 #include <QVariant>
 
+// FIXME provide complete API documentation with all QML requirements of the implementation!
+/**
+ * @brief The IntegrationInterface must be implemented by the integration plugins.
+ */
 class IntegrationInterface {
  public:
     enum States { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2 };
 
     virtual ~IntegrationInterface();
 
-    virtual void connect() = 0;       // Must be implemented by integration
-    virtual void disconnect() = 0;    // Must be implemented by integration
-    virtual void enterStandby() = 0;  // Can be overriden by integration
-    virtual void leaveStandby() = 0;  // Can be overriden by integration
+    /**
+     * @brief connect Must be implemented by integration as Q_INVOKABLE
+     */
+    virtual void connect() = 0;
+
+    /**
+     * @brief disconnect Must be implemented by integration as Q_INVOKABLE
+     */
+    virtual void disconnect() = 0;
+
+    /**
+     * @brief enterStandby Can be implemented by integration as Q_INVOKABLE
+     */
+    virtual void enterStandby() = 0;
+
+    /**
+     * @brief enterStandby Can be implemented by integration as Q_INVOKABLE
+     */
+    virtual void leaveStandby() = 0;
+
+    /**
+     * @brief sendCommand Must be implemented as Q_INVOKABLE
+     * @param type
+     * @param entity_id
+     * @param command
+     * @param param
+     */
     virtual void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
 
+    /**
+     * @brief state Returns the current state. See States enum definition.
+     * @details A Q_PROPERTY must be implemented with this method as READ accessor.
+     */
     virtual int     state() = 0;
+
+    /**
+     * @brief state Returns the integration identifier.
+     * @details A Q_PROPERTY must be implemented with this method as READ accessor.
+     */
     virtual QString integrationId() = 0;
+
+    /**
+     * @brief state Returns the friendly human readable name of the integration.
+     * @details A Q_PROPERTY must be implemented with this method as READ accessor.
+     */
     virtual QString friendlyName() = 0;
 };
 

@@ -10,10 +10,11 @@ INCLUDEPATH += $$PWD/src
 HEADERS += \
     $$PWD/src/yio-plugin/integration.h
 
-# FIXME(zehnm) integrate & adapt enhancements
-#HEADERS += $$PWD/src/yio-plugin/plugin.h \
-#    $$PWD/src/yio-plugin/integrationproxy.h
+HEADERS += \
+    $$PWD/src/yio-plugin/plugin.h \
+    $$PWD/src/yio-plugin/integration_threadadapter.h
 
-#SOURCES += $$PWD/src/yio-plugin/plugin.cpp \
-#    $$PWD/src/yio-plugin/integration.cpp \
-#    $$PWD/src/yio-plugin/integrationproxy.cpp
+SOURCES += \
+    $$PWD/src/yio-plugin/plugin.cpp \
+    $$PWD/src/yio-plugin/integration.cpp \
+    $$PWD/src/yio-plugin/integration_threadadapter.cpp

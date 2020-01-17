@@ -24,14 +24,14 @@
 
 #include <QDebug>
 
-#include "integrationproxy.h"
+#include "integration_threadadapter.h"
 #include "yio-plugin/integration.h"
 
 Plugin::Plugin(const char* pluginName, bool useWorkerThread)
     : m_logCategory(pluginName), m_useWorkerThread(useWorkerThread) {}
 
-void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
-                    QObject* configObj) {
+void Plugin::create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                    YioAPIInterface* api, ConfigInterface* configObj) {
     QMap<QObject*, QVariant> returnData;
 
     QVariantList data;
@@ -42,7 +42,7 @@ void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notif
             mdns = iter.value().toString();
         } else if (iter.key() == "data") {
             data = iter.value().toList();
-        } else if (iter.key() == "worker_thread") {
+        } else if (iter.key() == "workerThread") {
             m_useWorkerThread = iter.value().toBool();
         }
     }
@@ -53,9 +53,9 @@ void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notif
         d.insert("mdns", mdns);
         d.insert("type", config.value("type").toString());
         if (m_useWorkerThread) {
-            // Create Proxy
-            IntegrationProxy* integrationProxy = new IntegrationProxy(*integration, this);
-            returnData.insert(integrationProxy, d);
+            qCDebug(m_logCategory) << "Using ThreadAdapter to run integration in its own thread";
+            IntegrationThreadAdapter* integrationThread = new IntegrationThreadAdapter(*integration, this);
+            returnData.insert(integrationThread, d);
         } else {
             returnData.insert(integration, d);
         }
@@ -65,8 +65,9 @@ void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notif
 
 void Plugin::setLogEnabled(QtMsgType msgType, bool enable) { m_logCategory.setEnabled(msgType, enable); }
 
-Integration* Plugin::createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
-                                       QObject* api, QObject* configObj) {
+Integration* Plugin::createIntegration(const QVariantMap& config, EntitiesInterface* entities,
+                                       NotificationsInterface* notifications, YioAPIInterface* api,
+                                       ConfigInterface* configObj) {
     Q_UNUSED(config)
     Q_UNUSED(entities)
     Q_UNUSED(notifications)
