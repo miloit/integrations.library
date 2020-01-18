@@ -22,35 +22,66 @@
 
 #include "integration.h"
 
-// FIXME redo Integration implementation once the project is cleary separated from remote-software
-// and the common headers are working!
-/*
-Integration::Integration(const QVariantMap& config, QObject *entities, QObject *notifications, QObject* api,
- QObject *configObj, Plugin* parent) :
-    QObject(parent),
-    m_state(DISCONNECTED),
-    m_log(parent->m_logCategory) {
+const QString Integration::KEY_ID = CFG_KEY_ID;
+const QString Integration::KEY_FRIENDLYNAME = CFG_KEY_FRIENDLYNAME;
+const QString Integration::KEY_ENTITY_ID = CFG_KEY_ENTITY_ID;
+const QString Integration::KEY_AREA = CFG_KEY_AREA;
+const QString Integration::KEY_INTEGRATION = CFG_KEY_INTEGRATION;
+const QString Integration::KEY_SUPPORTED_FEATURES = CFG_KEY_SUPPORTED_FEATURES;
+const QString Integration::KEY_TYPE = CFG_KEY_TYPE;
+const QString Integration::KEY_MDNS = CFG_KEY_MDNS;
+const QString Integration::KEY_WORKERTHREAD = CFG_KEY_WORKERTHREAD;
+const QString Integration::OBJ_DATA = CFG_OBJ_DATA;
+
+Integration::Integration(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                         YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin)
+    : QObject(plugin),
+      m_state(DISCONNECTED),
+      m_entities(entities),
+      m_notifications(notifications),
+      m_yioapi(api),
+      m_config(configObj),
+      m_logCategory(plugin->m_logCategory) {
+
+    // FIXME remove QVariantMap indirection for friendlyName and integrationId:
+    //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
     for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
-        if (iter.key() == "friendly_name")
+        if (iter.key() == Integration::KEY_FRIENDLYNAME)
             m_friendlyName = iter.value().toString();
-        else if (iter.key() == "id")
-            m_integrationId =  iter.value().toString();
+        else if (iter.key() == Integration::KEY_ID)
+            m_integrationId = iter.value().toString();
     }
-    m_entities = qobject_cast<EntitiesInterface*>(entities);
-    m_notifications = qobject_cast<NotificationsInterface *>(notifications);
-    m_yioapi = qobject_cast<YioAPIInterface *>(api);
-    m_config = qobject_cast<ConfigInterface *>(configObj);
 }
 
 // Used for integration threading adapter
-Integration::Integration (Plugin* parent) :
-    QObject(parent),
-    m_state(DISCONNECTED),
-    m_entities(nullptr),
-    m_notifications(nullptr),
-    m_yioapi(nullptr),
-    m_config(nullptr),
-    m_log(parent->m_logCategory)
-{}
+Integration::Integration(Plugin* plugin)
+    : QObject(plugin),
+      m_state(DISCONNECTED),
+      m_entities(nullptr),
+      m_notifications(nullptr),
+      m_yioapi(nullptr),
+      m_config(nullptr),
+      m_logCategory(plugin->m_logCategory) {}
 
-*/
+Integration::~Integration() {}
+
+void Integration::setState(int state) {
+    if (state == m_state) {
+        return;
+    }
+    m_state = state;
+    emit stateChanged();
+    switch (state) {
+        case CONNECTING:
+            emit connecting();
+            break;
+        case CONNECTED:
+            emit connected();
+            m_entities->setConnected(m_integrationId, true);
+            break;
+        case DISCONNECTED:
+            emit disconnected();
+            m_entities->setConnected(m_integrationId, false);
+            break;
+    }
+}

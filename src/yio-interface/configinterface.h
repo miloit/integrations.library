@@ -23,6 +23,20 @@
 
 #include <QVariant>
 
+// HELP: anyone knows how to properly define "static const QString" constants across Qt plugin boundaries?
+// Workaround: use plain old macros with separated constant definitions in remote_software and the integration plugin.
+// Hope there's a better way...
+#define CFG_KEY_ID "id"
+#define CFG_KEY_FRIENDLYNAME "friendly_name"
+#define CFG_KEY_ENTITY_ID "entity_id"
+#define CFG_KEY_AREA "area"
+#define CFG_KEY_INTEGRATION "integration"
+#define CFG_KEY_SUPPORTED_FEATURES "supported_features"
+#define CFG_KEY_TYPE "type"
+#define CFG_KEY_MDNS "mdns"
+#define CFG_KEY_WORKERTHREAD "worker_thread"
+#define CFG_OBJ_DATA "data"
+
 /**
  * @brief This interface is implemented by the Entities object and used by integration DLLs to access the entities.
  */

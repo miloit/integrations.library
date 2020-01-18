@@ -22,11 +22,8 @@
 
 #include "integration_threadadapter.h"
 
-// FIXME quick and dirty workaround until logging integration is fixed
-static Q_LOGGING_CATEGORY(CLASS_LC, "integration.threadAdapter");
-
 IntegrationThreadAdapter::IntegrationThreadAdapter(Integration& integration, Plugin* plugin)
-    :  //    Integration(plugin),
+    : Integration(plugin),
       m_integration(integration) {
     setFriendlyName(integration.friendlyName());
     setIntegrationId(integration.integrationId());
@@ -55,34 +52,34 @@ IntegrationThreadAdapter::~IntegrationThreadAdapter() {
 }
 
 void IntegrationThreadAdapter::connect() {
-    qCDebug(CLASS_LC) << "ThreadAdapter connect";
+    qCDebug(m_logCategory) << "ThreadAdapter connect";
     emit connectSignal();
 }
 
 void IntegrationThreadAdapter::disconnect() {
-    qCDebug(CLASS_LC) << "ThreadAdapter disconnect";
+    qCDebug(m_logCategory) << "ThreadAdapter disconnect";
     emit disconnectSignal();
 }
 
 void IntegrationThreadAdapter::enterStandby() {
-    qCDebug(CLASS_LC) << "ThreadAdapter entering standby";
+    qCDebug(m_logCategory) << "ThreadAdapter entering standby";
     emit enterStandbySignal();
 }
 
 void IntegrationThreadAdapter::leaveStandby() {
-    qCDebug(CLASS_LC) << "ThreadAdapter leaving standby";
+    qCDebug(m_logCategory) << "ThreadAdapter leaving standby";
     emit leaveStandbySignal();
 }
 
 void IntegrationThreadAdapter::sendCommand(const QString& type, const QString& entity_id, int command,
                                            const QVariant& param) {
-    qCDebug(CLASS_LC) << "ThreadAdapter sendCommand" << type << entity_id << command << param;
+    qCDebug(m_logCategory) << "ThreadAdapter sendCommand" << type << entity_id << command << param;
     emit sendCommandSignal(type, entity_id, command, param);
 }
 
 void IntegrationThreadAdapter::onStateChanged() {
     m_state = m_integration.state();
-    qCDebug(CLASS_LC) << "ThreadAdapter state changed" << static_cast<States>(m_state);
+    qCDebug(m_logCategory) << "ThreadAdapter state changed" << static_cast<States>(m_state);
     emit stateChanged();
     switch (m_state) {
         case CONNECTING:

@@ -36,13 +36,26 @@ class Integration : public QObject, public IntegrationInterface {
     Q_INTERFACES(IntegrationInterface)
 
  public:
-    // TODO(mze) default implementation
-    // Integration(const QVariantMap& config, EntitiesInterface *entities, NotificationsInterface *notifications,
-    //             YioAPIInterface* api, ConfigInterface *configObj, Plugin* plugin);
-    // Integration(Plugin* plugin);
-    Integration() {}
+    // Common configuration keys. Initialized in integration.cpp
+    // HELP: anyone knows how to properly define "static const QString" constants across Qt plugin boundaries?
+    static const QString KEY_ID;
+    static const QString KEY_FRIENDLYNAME;
+    static const QString KEY_ENTITY_ID;
+    static const QString KEY_AREA;
+    static const QString KEY_INTEGRATION;
+    static const QString KEY_SUPPORTED_FEATURES;
+    static const QString KEY_TYPE;
+    static const QString KEY_MDNS;
+    static const QString KEY_WORKERTHREAD;
+    static const QString OBJ_DATA;
 
-    // FIXME do we really need all Q_PROPERTY & Q_INVOKABLE function? E.g. why should QML be able to change the
+    Integration(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin);
+    explicit Integration(Plugin* plugin);
+
+    ~Integration();
+
+    // FIXME do we really need all Q_PROPERTY & Q_INVOKABLE functions? E.g. why should QML be able to change the
     // integrationId?
     Q_PROPERTY(int state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(QString integrationId READ integrationId WRITE setIntegrationId NOTIFY integrationIdChanged)
@@ -54,44 +67,11 @@ class Integration : public QObject, public IntegrationInterface {
     Q_INVOKABLE void leaveStandby() {}  // Can be overriden by integration
     Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
 
-    void setup(const QVariantMap& config, EntitiesInterface* entities) {
-        // FIXME remove QVariantMap indirection for friendlyName and integrationId:
-        //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
-        for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
-            if (iter.key() == "friendly_name")
-                m_friendlyName = iter.value().toString();
-            else if (iter.key() == "id")
-                m_integrationId = iter.value().toString();
-        }
-        m_entities = entities;
-    }
-
-    ~Integration() {}
-
     // get the state
     int state() { return m_state; }
 
     // set the state
-    void setState(int state) {
-        if (state == m_state) {
-            return;
-        }
-        m_state = state;
-        emit stateChanged();
-        switch (state) {
-            case CONNECTING:
-                emit connecting();
-                break;
-            case CONNECTED:
-                emit connected();
-                m_entities->setConnected(m_integrationId, true);
-                break;
-            case DISCONNECTED:
-                emit disconnected();
-                m_entities->setConnected(m_integrationId, false);
-                break;
-        }
-    }
+    void setState(int state);
 
     // get the id of the integration
     QString integrationId() { return m_integrationId; }
@@ -116,15 +96,13 @@ class Integration : public QObject, public IntegrationInterface {
     void stateChanged();
 
  protected:
-    int                m_state = DISCONNECTED;
-    QString            m_integrationId;
-    QString            m_friendlyName;
-    EntitiesInterface* m_entities;
-    /*
+    int                     m_state;
+    QString                 m_integrationId;
+    QString                 m_friendlyName;
+    EntitiesInterface*      m_entities;
     bool                    m_workerThread;
     NotificationsInterface* m_notifications;
     YioAPIInterface*        m_yioapi;
     ConfigInterface*        m_config;
-    QLoggingCategory&       m_log;
-    */
+    QLoggingCategory&       m_logCategory;
 };

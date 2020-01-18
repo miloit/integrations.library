@@ -33,7 +33,8 @@
 
 // FIXME provide complete API documentation with all QML requirements of the implementation!
 /**
- * @brief The PluginInterface must be implemented by the integration plugins, it is used by the entities to operate the integration.
+ * @brief The PluginInterface must be implemented by the integration plugins, it is used by the entities to operate the
+ * integration.
  */
 class PluginInterface : public QObject {
     Q_OBJECT
@@ -41,10 +42,23 @@ class PluginInterface : public QObject {
  public:
     virtual ~PluginInterface() {}
 
-    // create an integration and return the object
+    /**
+     * @brief create Creates the integration and returns the object in the createDone signal.
+     * @param config The integration plugin specific configuration map
+     * @param entities The YIO entities interface
+     * @param notifications The YIO notifications interface
+     * @param api The YIO API interface
+     * @param configObj The YIO configuration interface
+     */
     virtual void create(const QVariantMap &config, EntitiesInterface *entities, NotificationsInterface *notifications,
                         YioAPIInterface *api, ConfigInterface *configObj) = 0;
+
     // enable log category
+    /**
+     * @brief setLogEnabled Enable or disable given log category.
+     * @param msgType
+     * @param enable
+     */
     virtual void setLogEnabled(QtMsgType msgType, bool enable) = 0;
 
  signals:
