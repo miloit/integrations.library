@@ -23,8 +23,7 @@
 #include "integration_threadadapter.h"
 
 IntegrationThreadAdapter::IntegrationThreadAdapter(Integration& integration, Plugin* plugin)
-    : Integration(plugin),
-      m_integration(integration) {
+    : Integration(plugin), m_integration(integration) {
     setFriendlyName(integration.friendlyName());
     setIntegrationId(integration.integrationId());
 

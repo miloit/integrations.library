@@ -48,6 +48,8 @@ class Integration : public QObject, public IntegrationInterface {
     static const QString KEY_MDNS;
     static const QString KEY_WORKERTHREAD;
     static const QString OBJ_DATA;
+    static const QString KEY_DATA_IP;
+    static const QString KEY_DATA_TOKEN;
 
     Integration(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
                 YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin);
@@ -100,7 +102,7 @@ class Integration : public QObject, public IntegrationInterface {
     QString                 m_integrationId;
     QString                 m_friendlyName;
     EntitiesInterface*      m_entities;
-    bool                    m_workerThread;
+    bool                    m_useWorkerThread;
     NotificationsInterface* m_notifications;
     YioAPIInterface*        m_yioapi;
     ConfigInterface*        m_config;

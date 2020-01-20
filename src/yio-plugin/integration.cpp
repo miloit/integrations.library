@@ -32,17 +32,21 @@ const QString Integration::KEY_TYPE = CFG_KEY_TYPE;
 const QString Integration::KEY_MDNS = CFG_KEY_MDNS;
 const QString Integration::KEY_WORKERTHREAD = CFG_KEY_WORKERTHREAD;
 const QString Integration::OBJ_DATA = CFG_OBJ_DATA;
+const QString Integration::KEY_DATA_IP = CFG_KEY_DATA_IP;
+const QString Integration::KEY_DATA_TOKEN = CFG_KEY_DATA_TOKEN;
+
+IntegrationInterface::~IntegrationInterface() {}
 
 Integration::Integration(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
                          YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin)
-    : QObject(plugin),
+    : QObject(plugin->m_useWorkerThread ? nullptr : plugin),
       m_state(DISCONNECTED),
       m_entities(entities),
+      m_useWorkerThread(plugin->m_useWorkerThread),
       m_notifications(notifications),
       m_yioapi(api),
       m_config(configObj),
       m_logCategory(plugin->m_logCategory) {
-
     // FIXME remove QVariantMap indirection for friendlyName and integrationId:
     //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
     for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
@@ -70,17 +74,26 @@ void Integration::setState(int state) {
         return;
     }
     m_state = state;
+
+    qCDebug(m_logCategory) << "Set state:" << static_cast<States>(state);
+
     emit stateChanged();
     switch (state) {
         case CONNECTING:
-            emit connecting();
+            if (!m_useWorkerThread) {
+                emit connecting();
+            }
             break;
         case CONNECTED:
-            emit connected();
+            if (!m_useWorkerThread) {
+                emit connected();
+            }
             m_entities->setConnected(m_integrationId, true);
             break;
         case DISCONNECTED:
-            emit disconnected();
+            if (!m_useWorkerThread) {
+                emit disconnected();
+            }
             m_entities->setConnected(m_integrationId, false);
             break;
     }

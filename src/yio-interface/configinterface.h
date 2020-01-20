@@ -36,6 +36,8 @@
 #define CFG_KEY_MDNS "mdns"
 #define CFG_KEY_WORKERTHREAD "worker_thread"
 #define CFG_OBJ_DATA "data"
+#define CFG_KEY_DATA_IP "ip"
+#define CFG_KEY_DATA_TOKEN "token"
 
 /**
  * @brief This interface is implemented by the Entities object and used by integration DLLs to access the entities.
