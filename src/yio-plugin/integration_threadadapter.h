@@ -29,12 +29,17 @@
 #include "yio-interface/integrationinterface.h"
 #include "yio-plugin/integration.h"
 
-class IntegrationProxy : public Integration {
+/**
+ * @brief The IntegrationThreadAdapter class is a convenient adapter to run an integration plugin within it's own
+ * thread. It takes care of proxying all signals between the integration interface and the plugin implementation.
+ */
+class IntegrationThreadAdapter : public Integration {
     Q_OBJECT
 
  public:
-    explicit IntegrationProxy(Integration& integration, Plugin* parent);  // NOLINT we need a non-const reference
-    ~IntegrationProxy() override;
+    explicit IntegrationThreadAdapter(Integration& integration,  // NOLINT we need a non-const reference
+                                      Plugin*      parent);
+    ~IntegrationThreadAdapter() override;
 
  public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
     // set the state

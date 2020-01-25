@@ -20,14 +20,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#include "integrationproxy.h"
+#include "integration_threadadapter.h"
 
-// FIXME quick and dirty workaround until logging integration is fixed
-static Q_LOGGING_CATEGORY(CLASS_LC, "integration.threadAdapter");
-
-IntegrationProxy::IntegrationProxy(Integration& integration, Plugin* plugin)
-    :  //    Integration(plugin),
-      m_integration(integration) {
+IntegrationThreadAdapter::IntegrationThreadAdapter(Integration& integration, Plugin* plugin)
+    : Integration(plugin), m_integration(integration) {
     setFriendlyName(integration.friendlyName());
     setIntegrationId(integration.integrationId());
 
@@ -36,53 +32,53 @@ IntegrationProxy::IntegrationProxy(Integration& integration, Plugin* plugin)
     // connect signals and slots
     QObject::connect(&m_thread, &QThread::finished, &integration, &QObject::deleteLater);
 
-    QObject::connect(this, &IntegrationProxy::connectSignal, &integration, &Integration::connect);
-    QObject::connect(this, &IntegrationProxy::disconnectSignal, &integration, &Integration::disconnect);
-    QObject::connect(this, &IntegrationProxy::enterStandbySignal, &integration, &Integration::enterStandby);
-    QObject::connect(this, &IntegrationProxy::leaveStandbySignal, &integration, &Integration::leaveStandby);
-    QObject::connect(this, &IntegrationProxy::sendCommandSignal, &integration, &Integration::sendCommand);
+    QObject::connect(this, &IntegrationThreadAdapter::connectSignal, &integration, &Integration::connect);
+    QObject::connect(this, &IntegrationThreadAdapter::disconnectSignal, &integration, &Integration::disconnect);
+    QObject::connect(this, &IntegrationThreadAdapter::enterStandbySignal, &integration, &Integration::enterStandby);
+    QObject::connect(this, &IntegrationThreadAdapter::leaveStandbySignal, &integration, &Integration::leaveStandby);
+    QObject::connect(this, &IntegrationThreadAdapter::sendCommandSignal, &integration, &Integration::sendCommand);
 
-    QObject::connect(&integration, &Integration::stateChanged, this, &IntegrationProxy::onStateChanged);
+    QObject::connect(&integration, &Integration::stateChanged, this, &IntegrationThreadAdapter::onStateChanged);
 
     m_thread.start();
 }
 
-IntegrationProxy::~IntegrationProxy() {
+IntegrationThreadAdapter::~IntegrationThreadAdapter() {
     if (m_thread.isRunning()) {
         m_thread.exit();
         m_thread.wait(5000);
     }
 }
 
-void IntegrationProxy::connect() {
-    qCDebug(CLASS_LC) << "Proxy connect";
+void IntegrationThreadAdapter::connect() {
+    qCDebug(m_logCategory) << "ThreadAdapter connect";
     emit connectSignal();
 }
 
-void IntegrationProxy::disconnect() {
-    qCDebug(CLASS_LC) << "Proxy disconnect";
+void IntegrationThreadAdapter::disconnect() {
+    qCDebug(m_logCategory) << "ThreadAdapter disconnect";
     emit disconnectSignal();
 }
 
-void IntegrationProxy::enterStandby() {
-    qCDebug(CLASS_LC) << "Proxy enterStandby";
+void IntegrationThreadAdapter::enterStandby() {
+    qCDebug(m_logCategory) << "ThreadAdapter entering standby";
     emit enterStandbySignal();
 }
 
-void IntegrationProxy::leaveStandby() {
-    qCDebug(CLASS_LC) << "Proxy leaveStandby";
+void IntegrationThreadAdapter::leaveStandby() {
+    qCDebug(m_logCategory) << "ThreadAdapter leaving standby";
     emit leaveStandbySignal();
 }
 
-void IntegrationProxy::sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) {
-    qCDebug(CLASS_LC) << "Proxy sendCommand" << type << entity_id << command << param;
+void IntegrationThreadAdapter::sendCommand(const QString& type, const QString& entity_id, int command,
+                                           const QVariant& param) {
+    qCDebug(m_logCategory) << "ThreadAdapter sendCommand" << type << entity_id << command << param;
     emit sendCommandSignal(type, entity_id, command, param);
 }
 
-// set the state
-void IntegrationProxy::onStateChanged() {
+void IntegrationThreadAdapter::onStateChanged() {
     m_state = m_integration.state();
-    // qCDebug(CLASS_LC) << "Proxy state changed" << static_cast<States>(m_state);
+    qCDebug(m_logCategory) << "ThreadAdapter state changed" << static_cast<States>(m_state);
     emit stateChanged();
     switch (m_state) {
         case CONNECTING:

@@ -24,7 +24,9 @@
 
 #include <QVariant>
 
-/// This interface is implemented by the Entities object and used by integration DLLs to access the entities
+/**
+ * @brief This interface is implemented by the Entities object and used by integration DLLs to access the entities.
+ */
 class NotificationsInterface {
  public:
     virtual ~NotificationsInterface();

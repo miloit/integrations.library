@@ -24,49 +24,61 @@
 
 #include <QDebug>
 
-#include "integrationproxy.h"
+#include "integration_threadadapter.h"
 #include "yio-plugin/integration.h"
 
 Plugin::Plugin(const char* pluginName, bool useWorkerThread)
     : m_logCategory(pluginName), m_useWorkerThread(useWorkerThread) {}
 
-void Plugin::create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
-                    QObject* configObj) {
-    QMap<QObject*, QVariant> returnData;
+void Plugin::create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                    YioAPIInterface* api, ConfigInterface* configObj) {
+    qCDebug(m_logCategory) << "Preparing integration:" << config.value(Integration::KEY_TYPE, "undefined").toString();
 
     QVariantList data;
     QString      mdns;
-
+    // FIXME this does not work for multiple self-discovered instances as the dock integration!
     for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
-        if (iter.key() == "mdns") {
+        if (iter.key() == Integration::KEY_MDNS) {
             mdns = iter.value().toString();
-        } else if (iter.key() == "data") {
+        } else if (iter.key() == Integration::OBJ_DATA) {
             data = iter.value().toList();
-        } else if (iter.key() == "worker_thread") {
+        } else if (iter.key() == Integration::KEY_WORKERTHREAD) {
             m_useWorkerThread = iter.value().toBool();
         }
     }
 
+    qCDebug(m_logCategory) << "Integration configurations:" << data.length();
+
+    QMap<QObject*, QVariant> returnData;
     for (int i = 0; i < data.length(); i++) {
         Integration* integration = createIntegration(data[i].toMap(), entities, notifications, api, configObj);
-        QVariantMap  d = data[i].toMap();
-        d.insert("mdns", mdns);
-        d.insert("type", config.value("type").toString());
+        if (!integration) {
+            qCWarning(m_logCategory) << "Failed to create integration instance:" << data[i].toMap();
+            continue;
+        }
+
+        QVariantMap d = data[i].toMap();
+        d.insert(Integration::KEY_MDNS, mdns);
+        d.insert(Integration::KEY_TYPE, config.value(Integration::KEY_TYPE).toString());
         if (m_useWorkerThread) {
-            // Create Proxy
-            IntegrationProxy* integrationProxy = new IntegrationProxy(*integration, this);
-            returnData.insert(integrationProxy, d);
+            qCDebug(m_logCategory) << "Using ThreadAdapter to run integration in its own thread";
+            IntegrationThreadAdapter* integrationThread = new IntegrationThreadAdapter(*integration, this);
+            returnData.insert(integrationThread, d);
         } else {
             returnData.insert(integration, d);
         }
     }
+
+    qCDebug(m_logCategory) << "Created integration instances:" << returnData.size();
+
     emit createDone(returnData);
 }
 
 void Plugin::setLogEnabled(QtMsgType msgType, bool enable) { m_logCategory.setEnabled(msgType, enable); }
 
-Integration* Plugin::createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
-                                       QObject* api, QObject* configObj) {
+Integration* Plugin::createIntegration(const QVariantMap& config, EntitiesInterface* entities,
+                                       NotificationsInterface* notifications, YioAPIInterface* api,
+                                       ConfigInterface* configObj) {
     Q_UNUSED(config)
     Q_UNUSED(entities)
     Q_UNUSED(notifications)

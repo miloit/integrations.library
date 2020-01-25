@@ -28,23 +28,45 @@
 #include "yio-interface/plugininterface.h"
 
 class Integration;
+
+/**
+ * @brief The Plugin class is the default skeleton implementation of an integration plugin.
+ */
 class Plugin : public PluginInterface {
     friend class Integration;
 
-    // Q_OBJECT
     Q_INTERFACES(PluginInterface)
 
  public:
     explicit Plugin(const char* pluginName, bool useWorkerThread);
 
-    void create(const QVariantMap& config, QObject* entities, QObject* notifications, QObject* api,
-                QObject* configObj) override;
+    /**
+     * @brief create Default implementation of PluginInterface::create: calls the internal createIntegration operation
+     * and moves it to a worker thread based on the configuration.
+     * @details If the integration requires special handling, e.g. uses auto discovery of possibly multiple instances
+     * like the dock integration, then this method must be overriden.
+     */
+    void create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                YioAPIInterface* api, ConfigInterface* configObj) override;
     void setLogEnabled(QtMsgType msgType, bool enable) override;
 
  protected:
-    virtual Integration* createIntegration(const QVariantMap& config, QObject* entities, QObject* notifications,
-                                           QObject* api, QObject* configObj);
+    /**
+     * @brief createIntegration Internal integration creation. Must be implemented by the integration plugin if the
+     * default PluginInterface::create implementation is used and no custom implementation is provided.
+     * @param config The integration plugin specific configuration map
+     * @param entities The YIO entities interface
+     * @param notifications The YIO notifications interface
+     * @param api The YIO API interface
+     * @param configObj The YIO configuration interface
+     * @return The created integration or null if creation failed
+     */
+    virtual Integration* createIntegration(const QVariantMap& config, EntitiesInterface* entities,
+                                           NotificationsInterface* notifications, YioAPIInterface* api,
+                                           ConfigInterface* configObj);
 
     QLoggingCategory m_logCategory;
-    bool             m_useWorkerThread;
+
+ private:
+    bool m_useWorkerThread;
 };
