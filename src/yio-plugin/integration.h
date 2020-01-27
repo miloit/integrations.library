@@ -67,6 +67,7 @@ class Integration : public QObject, public IntegrationInterface {
     Q_INVOKABLE void disconnect() = 0;  // Must be implemented by integration
     Q_INVOKABLE void enterStandby() {}  // Can be overriden by integration
     Q_INVOKABLE void leaveStandby() {}  // Can be overriden by integration
+    QStringList getAllAvailableEntities() { return QStringList(); } // Can be overriden by integration
     Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
 
     // get the state

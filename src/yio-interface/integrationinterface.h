@@ -50,9 +50,14 @@ class IntegrationInterface {
     virtual void enterStandby() = 0;
 
     /**
-     * @brief enterStandby Can be implemented by integration as Q_INVOKABLE
+     * @brief leaveStandby Can be implemented by integration as Q_INVOKABLE
      */
     virtual void leaveStandby() = 0;
+
+    /**
+     * @brief getAllAvailableEntities Can be implemented by integration
+     */
+    virtual QStringList getAllAvailableEntities() = 0;
 
     /**
      * @brief sendCommand Must be implemented as Q_INVOKABLE
