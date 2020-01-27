@@ -51,6 +51,7 @@ class IntegrationThreadAdapter : public Integration {
     Q_INVOKABLE void disconnect() override;
     Q_INVOKABLE void enterStandby() override;
     Q_INVOKABLE void leaveStandby() override;
+    QStringList      getAllAvailableEntities() override;
     Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command,
                                  const QVariant& param) override;
 
