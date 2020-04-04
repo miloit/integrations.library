@@ -57,11 +57,7 @@ class Integration : public QObject, public IntegrationInterface {
 
     ~Integration();
 
-    // FIXME do we really need all Q_PROPERTY & Q_INVOKABLE functions? E.g. why should QML be able to change the
-    // integrationId?
-    Q_PROPERTY(int state READ state WRITE setState NOTIFY stateChanged)
-    Q_PROPERTY(QString integrationId READ integrationId WRITE setIntegrationId NOTIFY integrationIdChanged)
-    Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName)
+    Q_PROPERTY(int state READ state NOTIFY stateChanged)
 
     Q_INVOKABLE void connect()    = 0;                                             // Must be implemented by integration
     Q_INVOKABLE void disconnect() = 0;                                             // Must be implemented by integration
@@ -80,10 +76,7 @@ class Integration : public QObject, public IntegrationInterface {
     QString integrationId() { return m_integrationId; }
 
     // set the id of the integration
-    void setIntegrationId(QString value) {
-        m_integrationId = value;
-        emit integrationIdChanged();
-    }
+    void setIntegrationId(QString value) { m_integrationId = value; }
 
     // get the friendly name of the integration
     QString friendlyName() { return m_friendlyName; }
@@ -92,7 +85,6 @@ class Integration : public QObject, public IntegrationInterface {
     void setFriendlyName(QString value) { m_friendlyName = value; }
 
  signals:
-    void integrationIdChanged();
     void connected();
     void connecting();
     void disconnected();
