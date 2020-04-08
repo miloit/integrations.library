@@ -61,6 +61,9 @@ class PluginInterface : public QObject {
      */
     virtual void setLogEnabled(QtMsgType msgType, bool enable) = 0;
 
+    virtual QTranslator *installTranslator(QString language) = 0;
+    virtual QTranslator *pluginTranslator()                  = 0;
+
  signals:
     void createDone(QMap<QObject *, QVariant> map);
 };

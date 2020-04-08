@@ -40,6 +40,7 @@ class ClimateDef : public QObject {
         F_TEMPERATURE_MAX,
         F_TEMPERATURE_MIN,
         F_HVAC_MODES,
+        F_ON,
         F_OFF,
         F_HEAT,
         F_COOL
@@ -58,11 +59,11 @@ class ClimateInterface {
  public:
     virtual ~ClimateInterface();
 
-    virtual double  temperature() = 0;
+    virtual double  temperature()       = 0;
     virtual double  targetTemperature() = 0;
-    virtual QString temperatureUnit() = 0;
-    virtual double  temperatureMax() = 0;
-    virtual double  temperatureMin() = 0;
+    virtual QString temperatureUnit()   = 0;
+    virtual double  temperatureMax()    = 0;
+    virtual double  temperatureMin()    = 0;
 };
 
 QT_BEGIN_NAMESPACE

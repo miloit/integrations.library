@@ -46,9 +46,11 @@ class Plugin : public PluginInterface {
      * @details If the integration requires special handling, e.g. uses auto discovery of possibly multiple instances
      * like the dock integration, then this method must be overriden.
      */
-    void create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
-                YioAPIInterface* api, ConfigInterface* configObj) override;
-    void setLogEnabled(QtMsgType msgType, bool enable) override;
+    void         create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                        YioAPIInterface* api, ConfigInterface* configObj) override;
+    void         setLogEnabled(QtMsgType msgType, bool enable) override;
+    QTranslator* installTranslator(QString language) override;
+    QTranslator* pluginTranslator() override;
 
  protected:
     /**
@@ -68,5 +70,6 @@ class Plugin : public PluginInterface {
     QLoggingCategory m_logCategory;
 
  private:
-    bool m_useWorkerThread;
+    bool         m_useWorkerThread;
+    QTranslator* m_translator;
 };
