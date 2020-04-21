@@ -53,9 +53,7 @@ class ConfigInterface {
     virtual QVariantMap  getIntegration(const QString& type)     = 0;
     virtual QVariantMap  getAllEntities()                        = 0;
     virtual QVariantList getEntities(const QString& type)        = 0;
-
-    //    virtual QVariant getContextProperty(const QString& name) = 0;
-    virtual QObject* getQMLObject(const QString& name) = 0;
+    virtual QObject*     getQMLObject(const QString& name)       = 0;
 };
 
 QT_BEGIN_NAMESPACE

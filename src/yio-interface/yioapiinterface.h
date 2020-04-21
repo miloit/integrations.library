@@ -34,16 +34,15 @@ class YioAPIInterface : public QObject {
  public:
     virtual ~YioAPIInterface() {}
 
-    virtual void start() = 0;
-    virtual void stop() = 0;
+    virtual void start()                      = 0;
+    virtual void stop()                       = 0;
     virtual void sendMessage(QString message) = 0;
 
     // CONFIG MANIPULATION METHODS
     virtual QVariantMap getConfig() = 0;
-    virtual bool        addEntityToConfig(QVariantMap entity) = 0;
 
     // NETWORK SERVICES DISCOVERY
-    virtual void discoverNetworkServices() = 0;
+    virtual void discoverNetworkServices()             = 0;
     virtual void discoverNetworkServices(QString mdns) = 0;
 
  signals:

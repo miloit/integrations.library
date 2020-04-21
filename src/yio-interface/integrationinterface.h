@@ -35,44 +35,38 @@ class IntegrationInterface {
     virtual ~IntegrationInterface();
 
     /**
-     * @brief connect Must be implemented by integration as Q_INVOKABLE
-     */
-    virtual void connect() = 0;
-
-    /**
-     * @brief disconnect Must be implemented by integration as Q_INVOKABLE
-     */
-    virtual void disconnect() = 0;
-
-    /**
-     * @brief enterStandby Can be implemented by integration as Q_INVOKABLE
-     */
-    virtual void enterStandby() = 0;
-
-    /**
-     * @brief leaveStandby Can be implemented by integration as Q_INVOKABLE
-     */
-    virtual void leaveStandby() = 0;
-
-    /**
      * @brief getAllAvailableEntities Can be implemented by integration
+     * @returns list of QVariantMap
+     * @details
+     * https://github.com/YIO-Remote/documentation/wiki/developer-API-remote#get-available-entities-json-of-loaded-entities
      */
-    virtual QStringList getAllAvailableEntities() = 0;
+    virtual QVariantList getAllAvailableEntities() = 0;
 
     /**
-     * @brief sendCommand Must be implemented as Q_INVOKABLE
+     * @brief addAvailableEntity
+     * @param entityId
      * @param type
-     * @param entity_id
+     * @param integration
+     * @param friendlyName
+     * @param supportedFeatures
+     */
+    virtual bool addAvailableEntity(const QString& entityId, const QString& type, const QString& integration,
+                                    const QString& friendlyName, const QStringList& supportedFeatures) = 0;
+
+    /**
+     * @brief sendCommand Must be implemented
+     * @param type
+     * @param entityId
      * @param command
      * @param param
      */
-    virtual void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
+    virtual void sendCommand(const QString& type, const QString& entityId, int command, const QVariant& param) = 0;
 
     /**
      * @brief state Returns the current state. See States enum definition.
      * @details A Q_PROPERTY must be implemented with this method as READ accessor.
      */
-    virtual int     state() = 0;
+    virtual int state() = 0;
 
     /**
      * @brief state Returns the integration identifier.
@@ -85,6 +79,27 @@ class IntegrationInterface {
      * @details A Q_PROPERTY must be implemented with this method as READ accessor.
      */
     virtual QString friendlyName() = 0;
+
+ public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+    /**
+     * @brief connect Must be implemented by integration
+     */
+    virtual void connect() = 0;
+
+    /**
+     * @brief disconnect Must be implemented by integration
+     */
+    virtual void disconnect() = 0;
+
+    /**
+     * @brief enterStandby Can be implemented by integration
+     */
+    virtual void enterStandby() = 0;
+
+    /**
+     * @brief leaveStandby Can be implemented by integration
+     */
+    virtual void leaveStandby() = 0;
 };
 
 QT_BEGIN_NAMESPACE

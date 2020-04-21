@@ -70,15 +70,15 @@ void IntegrationThreadAdapter::leaveStandby() {
     emit leaveStandbySignal();
 }
 
-QStringList IntegrationThreadAdapter::getAllAvailableEntities() {
+QVariantList IntegrationThreadAdapter::getAllAvailableEntities() {
     qCDebug(m_logCategory) << "ThreadAdapter getAllAvailableEntities";
     return m_integration.getAllAvailableEntities();
 }
 
-void IntegrationThreadAdapter::sendCommand(const QString& type, const QString& entity_id, int command,
+void IntegrationThreadAdapter::sendCommand(const QString& type, const QString& entityId, int command,
                                            const QVariant& param) {
-    qCDebug(m_logCategory) << "ThreadAdapter sendCommand" << type << entity_id << command << param;
-    emit sendCommandSignal(type, entity_id, command, param);
+    qCDebug(m_logCategory) << "ThreadAdapter sendCommand" << type << entityId << command << param;
+    emit sendCommandSignal(type, entityId, command, param);
 }
 
 void IntegrationThreadAdapter::onStateChanged() {

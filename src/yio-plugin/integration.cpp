@@ -22,18 +22,18 @@
 
 #include "integration.h"
 
-const QString Integration::KEY_ID = CFG_KEY_ID;
-const QString Integration::KEY_FRIENDLYNAME = CFG_KEY_FRIENDLYNAME;
-const QString Integration::KEY_ENTITY_ID = CFG_KEY_ENTITY_ID;
-const QString Integration::KEY_AREA = CFG_KEY_AREA;
-const QString Integration::KEY_INTEGRATION = CFG_KEY_INTEGRATION;
+const QString Integration::KEY_ID                 = CFG_KEY_ID;
+const QString Integration::KEY_FRIENDLYNAME       = CFG_KEY_FRIENDLYNAME;
+const QString Integration::KEY_ENTITY_ID          = CFG_KEY_ENTITY_ID;
+const QString Integration::KEY_AREA               = CFG_KEY_AREA;
+const QString Integration::KEY_INTEGRATION        = CFG_KEY_INTEGRATION;
 const QString Integration::KEY_SUPPORTED_FEATURES = CFG_KEY_SUPPORTED_FEATURES;
-const QString Integration::KEY_TYPE = CFG_KEY_TYPE;
-const QString Integration::KEY_MDNS = CFG_KEY_MDNS;
-const QString Integration::KEY_WORKERTHREAD = CFG_KEY_WORKERTHREAD;
-const QString Integration::OBJ_DATA = CFG_OBJ_DATA;
-const QString Integration::KEY_DATA_IP = CFG_KEY_DATA_IP;
-const QString Integration::KEY_DATA_TOKEN = CFG_KEY_DATA_TOKEN;
+const QString Integration::KEY_TYPE               = CFG_KEY_TYPE;
+const QString Integration::KEY_MDNS               = CFG_KEY_MDNS;
+const QString Integration::KEY_WORKERTHREAD       = CFG_KEY_WORKERTHREAD;
+const QString Integration::OBJ_DATA               = CFG_OBJ_DATA;
+const QString Integration::KEY_DATA_IP            = CFG_KEY_DATA_IP;
+const QString Integration::KEY_DATA_TOKEN         = CFG_KEY_DATA_TOKEN;
 
 IntegrationInterface::~IntegrationInterface() {}
 
@@ -68,6 +68,30 @@ Integration::Integration(Plugin* plugin)
       m_logCategory(plugin->m_logCategory) {}
 
 Integration::~Integration() {}
+
+bool Integration::addAvailableEntity(const QString& entityId, const QString& type, const QString& integration,
+                                     const QString& friendlyName, const QStringList& supportedFeatures) {
+    // if the entity is already in the list, skip
+    for (int i = 0; i < m_allAvailableEntities.length(); i++) {
+        if (m_allAvailableEntities[i].toMap().value(Integration::KEY_ENTITY_ID).toString() == entityId) {
+            return false;
+        }
+    }
+
+    if (m_entities->isSupportedEntityType(type)) {
+        QVariantMap entity;
+        entity.insert(Integration::KEY_ENTITY_ID, entityId);
+        entity.insert(Integration::KEY_TYPE, type);
+        entity.insert(Integration::KEY_INTEGRATION, integration);
+        entity.insert(Integration::KEY_FRIENDLYNAME, friendlyName);
+        entity.insert(Integration::KEY_SUPPORTED_FEATURES, supportedFeatures);
+        m_allAvailableEntities.append(entity);
+        return true;
+    } else {
+        // return false if the type is not supported
+        return false;
+    }
+}
 
 void Integration::setState(int state) {
     if (state == m_state) {

@@ -55,31 +55,29 @@ class Integration : public QObject, public IntegrationInterface {
                 YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin);
     explicit Integration(Plugin* plugin);
 
-    ~Integration();
+    ~Integration() override;
 
     Q_PROPERTY(int state READ state NOTIFY stateChanged)
 
-    Q_INVOKABLE void connect()    = 0;                                             // Must be implemented by integration
-    Q_INVOKABLE void disconnect() = 0;                                             // Must be implemented by integration
-    void             enterStandby() {}                                             // Can be overriden by integration
-    void             leaveStandby() {}                                             // Can be overriden by integration
-    QStringList      getAllAvailableEntities() { return m_allAvailableEntities; }  // Can be overriden by integration
-    Q_INVOKABLE void sendCommand(const QString& type, const QString& entity_id, int command, const QVariant& param) = 0;
+    QVariantList getAllAvailableEntities() override { return m_allAvailableEntities; }
+    bool         addAvailableEntity(const QString& entityId, const QString& type, const QString& integration,
+                                    const QString& friendlyName, const QStringList& supportedFeatures) override;
+    void sendCommand(const QString& type, const QString& entityId, int command, const QVariant& param) override = 0;
 
     // get the state
-    int state() { return m_state; }
+    int state() override { return m_state; }
 
     // set the state
     void setState(int state);
 
     // get the id of the integration
-    QString integrationId() { return m_integrationId; }
+    QString integrationId() override { return m_integrationId; }
 
     // set the id of the integration
     void setIntegrationId(QString value) { m_integrationId = value; }
 
     // get the friendly name of the integration
-    QString friendlyName() { return m_friendlyName; }
+    QString friendlyName() override { return m_friendlyName; }
 
     // set the friendly name of the integration
     void setFriendlyName(QString value) { m_friendlyName = value; }
@@ -89,6 +87,12 @@ class Integration : public QObject, public IntegrationInterface {
     void connecting();
     void disconnected();
     void stateChanged();
+
+ public slots:                       // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+    void connect() override    = 0;  // Must be implemented by integration
+    void disconnect() override = 0;  // Must be implemented by integration
+    void enterStandby() override {}  // Can be overriden by integration
+    void leaveStandby() override {}  // Can be overriden by integration
 
  protected:
     int                     m_state;
@@ -100,5 +104,5 @@ class Integration : public QObject, public IntegrationInterface {
     YioAPIInterface*        m_yioapi;
     ConfigInterface*        m_config;
     QLoggingCategory&       m_logCategory;
-    QStringList             m_allAvailableEntities;
+    QVariantList            m_allAvailableEntities;
 };

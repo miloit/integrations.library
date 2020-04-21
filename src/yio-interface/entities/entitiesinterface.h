@@ -48,6 +48,12 @@ class EntitiesInterface {
 
     // get entity interface by entity_id
     virtual EntityInterface* getEntityInterface(const QString& entity_id) = 0;
+
+    // get a list of supported entities
+    virtual QStringList supportedEntities() = 0;
+
+    // checks if a type is supported
+    virtual bool isSupportedEntityType(const QString& type) = 0;
 };
 
 QT_BEGIN_NAMESPACE
