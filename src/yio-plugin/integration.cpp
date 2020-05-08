@@ -34,6 +34,7 @@ const QString Integration::KEY_WORKERTHREAD       = CFG_KEY_WORKERTHREAD;
 const QString Integration::OBJ_DATA               = CFG_OBJ_DATA;
 const QString Integration::KEY_DATA_IP            = CFG_KEY_DATA_IP;
 const QString Integration::KEY_DATA_TOKEN         = CFG_KEY_DATA_TOKEN;
+const QString Integration::KEY_DATA_SSL           = CFG_KEY_DATA_SSL;
 
 IntegrationInterface::~IntegrationInterface() {}
 
