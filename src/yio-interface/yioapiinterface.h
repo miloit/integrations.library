@@ -46,7 +46,7 @@ class YioAPIInterface : public QObject {
     virtual void discoverNetworkServices(QString mdns) = 0;
 
  signals:
-    void serviceDiscovered(QMap<QString, QVariantMap> services);
+    void serviceDiscovered(QVariantMap services);
 };
 
 QT_BEGIN_NAMESPACE
