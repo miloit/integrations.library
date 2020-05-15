@@ -48,6 +48,8 @@ class ConfigInterface {
  public:
     virtual ~ConfigInterface();
 
+    enum UnitSystem { METRIC = 0, IMPERIAL = 1 };
+
     virtual QVariantMap  getConfig()                             = 0;
     virtual void         setConfig(const QVariantMap& getConfig) = 0;
     virtual QVariantMap  getSettings()                           = 0;
@@ -56,6 +58,7 @@ class ConfigInterface {
     virtual QVariantMap  getAllEntities()                        = 0;
     virtual QVariantList getEntities(const QString& type)        = 0;
     virtual QObject*     getQMLObject(const QString& name)       = 0;
+    virtual UnitSystem   getUnitSystem()                         = 0;
 };
 
 QT_BEGIN_NAMESPACE
