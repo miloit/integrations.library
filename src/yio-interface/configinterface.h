@@ -39,6 +39,7 @@
 #define CFG_KEY_DATA_IP "ip"
 #define CFG_KEY_DATA_TOKEN "token"
 #define CFG_KEY_DATA_SSL "ssl"
+#define CFG_KEY_DATA_SSL_IGNORE "ssl_ignore"
 
 /**
  * @brief This interface is implemented by the Entities object and used by integration DLLs to access the entities.
@@ -46,6 +47,8 @@
 class ConfigInterface {
  public:
     virtual ~ConfigInterface();
+
+    enum UnitSystem { METRIC = 0, IMPERIAL = 1 };
 
     virtual QVariantMap  getConfig()                             = 0;
     virtual void         setConfig(const QVariantMap& getConfig) = 0;
@@ -55,6 +58,7 @@ class ConfigInterface {
     virtual QVariantMap  getAllEntities()                        = 0;
     virtual QVariantList getEntities(const QString& type)        = 0;
     virtual QObject*     getQMLObject(const QString& name)       = 0;
+    virtual UnitSystem   getUnitSystem()                         = 0;
 };
 
 QT_BEGIN_NAMESPACE

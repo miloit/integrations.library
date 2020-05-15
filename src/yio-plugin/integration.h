@@ -51,6 +51,7 @@ class Integration : public QObject, public IntegrationInterface {
     static const QString KEY_DATA_IP;
     static const QString KEY_DATA_TOKEN;
     static const QString KEY_DATA_SSL;
+    static const QString KEY_DATA_SSL_IGNORE;
 
     Integration(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
                 YioAPIInterface* api, ConfigInterface* configObj, Plugin* plugin);
