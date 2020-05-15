@@ -39,6 +39,7 @@
 #define CFG_KEY_DATA_IP "ip"
 #define CFG_KEY_DATA_TOKEN "token"
 #define CFG_KEY_DATA_SSL "ssl"
+#define CFG_KEY_DATA_SSL_IGNORE "ssl_ignore"
 
 /**
  * @brief This interface is implemented by the Entities object and used by integration DLLs to access the entities.

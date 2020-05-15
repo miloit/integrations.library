@@ -35,6 +35,7 @@ const QString Integration::OBJ_DATA               = CFG_OBJ_DATA;
 const QString Integration::KEY_DATA_IP            = CFG_KEY_DATA_IP;
 const QString Integration::KEY_DATA_TOKEN         = CFG_KEY_DATA_TOKEN;
 const QString Integration::KEY_DATA_SSL           = CFG_KEY_DATA_SSL;
+const QString Integration::KEY_DATA_SSL_IGNORE    = CFG_KEY_DATA_SSL_IGNORE;
 
 IntegrationInterface::~IntegrationInterface() {}
 
