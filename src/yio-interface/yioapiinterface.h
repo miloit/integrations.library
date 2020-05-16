@@ -45,6 +45,10 @@ class YioAPIInterface : public QObject {
     virtual void discoverNetworkServices()             = 0;
     virtual void discoverNetworkServices(QString mdns) = 0;
 
+    virtual bool addEntity(QVariantMap entity)   = 0;
+    virtual bool updatEntity(QVariantMap entity) = 0;
+    virtual bool removeEntity(QString entityId)  = 0;
+
  signals:
     void serviceDiscovered(QVariantMap services);
 };
