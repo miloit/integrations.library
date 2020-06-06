@@ -11,6 +11,7 @@ HEADERS += \
     $$PWD/src/yio-interface/integrationinterface.h \
     $$PWD/src/yio-interface/notificationsinterface.h \
     $$PWD/src/yio-interface/plugininterface.h \
+    $$PWD/src/yio-interface/unitsystem.h \
     $$PWD/src/yio-interface/yioapiinterface.h \
     $$PWD/src/yio-interface/entities/blindinterface.h \
     $$PWD/src/yio-interface/entities/climateinterface.h \
