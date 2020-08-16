@@ -51,7 +51,7 @@ Integration::Integration(const QVariantMap& config, EntitiesInterface* entities,
       m_logCategory(plugin->m_logCategory) {
     // FIXME remove QVariantMap indirection for friendlyName and integrationId:
     //       plugins MUST set them themself. Otherwise it's just very confusing without any benefits.
-    for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
+    for (QVariantMap::const_iterator iter = config.cbegin(); iter != config.cend(); ++iter) {
         if (iter.key() == Integration::KEY_FRIENDLYNAME)
             m_friendlyName = iter.value().toString();
         else if (iter.key() == Integration::KEY_ID)
