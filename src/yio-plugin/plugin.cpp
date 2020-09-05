@@ -37,7 +37,7 @@ void Plugin::create(const QVariantMap& config, EntitiesInterface* entities, Noti
     QVariantList data;
     QString      mdns;
     // FIXME this does not work for multiple self-discovered instances as the dock integration!
-    for (QVariantMap::const_iterator iter = config.begin(); iter != config.end(); ++iter) {
+    for (QVariantMap::const_iterator iter = config.cbegin(); iter != config.cend(); ++iter) {
         if (iter.key() == Integration::KEY_MDNS) {
             mdns = iter.value().toString();
         } else if (iter.key() == Integration::OBJ_DATA) {
