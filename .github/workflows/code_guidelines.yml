@@ -4,12 +4,13 @@ name: Code Guidelines
 on: [push, pull_request]
 jobs:
   cpplint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
       - run: python -m pip install cpplint
-      - run: sudo update-alternatives --install /usr/bin/python python ${pythonLocation}/bin/python3.8 10
       - name: cpplint
         shell: python
         run: |
@@ -41,6 +42,6 @@ jobs:
             print(f"{len(space_files)} files contain space character:")
             print("\n".join(space_files) + "\n")
 
-          bad_files = len(upper_files + space_files)
+          bad_files = len(space_files)
           if bad_files:
             sys.exit(bad_files)
