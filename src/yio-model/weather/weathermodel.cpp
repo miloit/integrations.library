@@ -34,7 +34,7 @@ void WeatherModel::clear() {
 
 void WeatherModel::addItems(const QList<WeatherItem>& items) {
     clear();
-    for (QList<WeatherItem>::const_iterator i = items.begin(); i < items.end(); ++i) {
+    for (QList<WeatherItem>::const_iterator i = items.cbegin(); i < items.cend(); ++i) {
         _items.append(*i);
     }
     beginInsertRows(QModelIndex(), 0, rowCount() - 1);
