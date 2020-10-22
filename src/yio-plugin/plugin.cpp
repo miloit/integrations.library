@@ -27,8 +27,8 @@
 #include "integration_threadadapter.h"
 #include "yio-plugin/integration.h"
 
-Plugin::Plugin(const char* pluginName, bool useWorkerThread)
-    : m_logCategory(pluginName), m_useWorkerThread(useWorkerThread), m_translator(new QTranslator(this)) {}
+Plugin::Plugin(const char* pluginLogCategory, bool useWorkerThread)
+    : m_logCategory(pluginLogCategory), m_useWorkerThread(useWorkerThread), m_translator(new QTranslator(this)) {}
 
 void Plugin::create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
                     YioAPIInterface* api, ConfigInterface* configObj) {
@@ -74,14 +74,22 @@ void Plugin::create(const QVariantMap& config, EntitiesInterface* entities, Noti
     emit createDone(returnData);
 }
 
-void Plugin::setLogEnabled(QtMsgType msgType, bool enable) { m_logCategory.setEnabled(msgType, enable); }
+/**
+ * @deprecated This method will be removed in a future major release of the API
+ *             Logging categories should only be handled through Qt log rules.
+ */
+void Plugin::setLogEnabled(QtMsgType msgType, bool enable) {
+    m_logCategory.setEnabled(msgType, enable);
+}
 
 QTranslator* Plugin::installTranslator(QString language) {
     m_translator->load(":/translations/" + language);
     return m_translator;
 }
 
-QTranslator* Plugin::pluginTranslator() { return m_translator; }
+QTranslator* Plugin::pluginTranslator() {
+    return m_translator;
+}
 
 Integration* Plugin::createIntegration(const QVariantMap& config, EntitiesInterface* entities,
                                        NotificationsInterface* notifications, YioAPIInterface* api,

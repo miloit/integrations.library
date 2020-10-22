@@ -43,7 +43,7 @@ class PluginInterface : public QObject {
     virtual ~PluginInterface() {}
 
     /**
-     * @brief create Creates the integration and returns the object in the createDone signal.
+     * @brief Creates the integration and returns the object in the createDone signal.
      * @param config The integration plugin specific configuration map
      * @param entities The YIO entities interface
      * @param notifications The YIO notifications interface
@@ -53,18 +53,19 @@ class PluginInterface : public QObject {
     virtual void create(const QVariantMap &config, EntitiesInterface *entities, NotificationsInterface *notifications,
                         YioAPIInterface *api, ConfigInterface *configObj) = 0;
 
-    // enable log category
     /**
-     * @brief setLogEnabled Enable or disable given log category.
-     * @param msgType
-     * @param enable
+     * @deprecated This method will be removed in a future major release of the API
+     *             Logging categories should only be handled through Qt log rules.
+     * @brief Enable or disable given log category.
      */
     virtual void setLogEnabled(QtMsgType msgType, bool enable) = 0;
 
     virtual QTranslator *installTranslator(QString language) = 0;
-    virtual QTranslator *pluginTranslator()                  = 0;
+    virtual QTranslator *pluginTranslator() = 0;
 
  signals:
+    // TODO(zehnm) For next major / breaking change release: use QHash instead of QMap.
+    //             See Clazy analysis: qmap-with-pointer-key.
     void createDone(QMap<QObject *, QVariant> map);
 };
 

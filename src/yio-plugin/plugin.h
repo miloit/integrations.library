@@ -38,23 +38,35 @@ class Plugin : public PluginInterface {
     Q_INTERFACES(PluginInterface)
 
  public:
-    explicit Plugin(const char* pluginName, bool useWorkerThread);
+    /**
+     * @brief Constructs the plugin class and initializes the logging category with the given plugin name.
+     * @param pluginLogCategory The Qt logging category for the plugin. Should be set to:  `yio.plugin.<pluginName>`.
+     *        The name should be lower case and only contain letters and numbers without spaces.
+     * @param useWorkerThread true: run plugin code in own worker thread, false: run in main thread
+     */
+    explicit Plugin(const char* pluginLogCategory, bool useWorkerThread);
 
     /**
-     * @brief create Default implementation of PluginInterface::create: calls the internal createIntegration operation
+     * @brief Default implementation of PluginInterface::create: calls the internal createIntegration operation
      * and moves it to a worker thread based on the configuration.
      * @details If the integration requires special handling, e.g. uses auto discovery of possibly multiple instances
      * like the dock integration, then this method must be overriden.
      */
-    void         create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
-                        YioAPIInterface* api, ConfigInterface* configObj) override;
-    void         setLogEnabled(QtMsgType msgType, bool enable) override;
+    void create(const QVariantMap& config, EntitiesInterface* entities, NotificationsInterface* notifications,
+                YioAPIInterface* api, ConfigInterface* configObj) override;
+
+    /**
+     * @deprecated This method will be removed in a future major release of the API
+     *             Logging categories should only be handled through Qt log rules.
+     */
+    void setLogEnabled(QtMsgType msgType, bool enable) override;
+
     QTranslator* installTranslator(QString language) override;
     QTranslator* pluginTranslator() override;
 
  protected:
     /**
-     * @brief createIntegration Internal integration creation. Must be implemented by the integration plugin if the
+     * @brief Internal integration creation. Must be implemented by the integration plugin if the
      * default PluginInterface::create implementation is used and no custom implementation is provided.
      * @param config The integration plugin specific configuration map
      * @param entities The YIO entities interface

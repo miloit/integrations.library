@@ -22,6 +22,7 @@
 
 #include "integration.h"
 
+// clang-format off
 const QString Integration::KEY_ID                 = CFG_KEY_ID;
 const QString Integration::KEY_FRIENDLYNAME       = CFG_KEY_FRIENDLYNAME;
 const QString Integration::KEY_ENTITY_ID          = CFG_KEY_ENTITY_ID;
@@ -33,9 +34,11 @@ const QString Integration::KEY_MDNS               = CFG_KEY_MDNS;
 const QString Integration::KEY_WORKERTHREAD       = CFG_KEY_WORKERTHREAD;
 const QString Integration::OBJ_DATA               = CFG_OBJ_DATA;
 const QString Integration::KEY_DATA_IP            = CFG_KEY_DATA_IP;
+const QString Integration::KEY_DATA_URL           = CFG_KEY_DATA_URL;
 const QString Integration::KEY_DATA_TOKEN         = CFG_KEY_DATA_TOKEN;
 const QString Integration::KEY_DATA_SSL           = CFG_KEY_DATA_SSL;
 const QString Integration::KEY_DATA_SSL_IGNORE    = CFG_KEY_DATA_SSL_IGNORE;
+// clang-format on
 
 IntegrationInterface::~IntegrationInterface() {}
 

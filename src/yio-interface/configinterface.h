@@ -39,6 +39,7 @@
 #define CFG_KEY_WORKERTHREAD "worker_thread"
 #define CFG_OBJ_DATA "data"
 #define CFG_KEY_DATA_IP "ip"
+#define CFG_KEY_DATA_URL "url"
 #define CFG_KEY_DATA_TOKEN "token"
 #define CFG_KEY_DATA_SSL "ssl"
 #define CFG_KEY_DATA_SSL_IGNORE "ssl_ignore"

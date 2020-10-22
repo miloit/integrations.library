@@ -49,6 +49,7 @@ class Integration : public QObject, public IntegrationInterface {
     static const QString KEY_WORKERTHREAD;
     static const QString OBJ_DATA;
     static const QString KEY_DATA_IP;
+    static const QString KEY_DATA_URL;
     static const QString KEY_DATA_TOKEN;
     static const QString KEY_DATA_SSL;
     static const QString KEY_DATA_SSL_IGNORE;
@@ -91,7 +92,7 @@ class Integration : public QObject, public IntegrationInterface {
     void stateChanged();
 
  public slots:                       // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
-    void connect() override    = 0;  // Must be implemented by integration
+    void connect() override = 0;     // Must be implemented by integration
     void disconnect() override = 0;  // Must be implemented by integration
     void enterStandby() override {}  // Can be overriden by integration
     void leaveStandby() override {}  // Can be overriden by integration
