@@ -36,16 +36,16 @@ exists($$[QT_INSTALL_BINS]/lrelease):QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelea
   # think about our Windows friends
 exists($$[QT_INSTALL_BINS]/lupdate.exe):QMAKE_LUPDATE = $$[QT_INSTALL_BINS]/lupdate.exe
 exists($$[QT_INSTALL_BINS]/lrelease.exe):QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease.exe
-# 2.) Check if it's available from $HOST_DIR env var which is set during Buildroot. Only use it if it's not already defined (*=).
-exists($$(HOST_DIR)/bin/lupdate):QMAKE_LUPDATE *= $$(HOST_DIR)/bin/lupdate
-exists($$(HOST_DIR)/bin/lrelease):QMAKE_LRELEASE *= $$(HOST_DIR)/bin/lrelease
+# 2.) Check if it's available from $HOST_DIR env var which is set during Buildroot. Only use it if it's not already defined.
+isEmpty(QMAKE_LUPDATE):exists($$(HOST_DIR)/bin/lupdate):QMAKE_LUPDATE = $$(HOST_DIR)/bin/lupdate
+isEmpty(QMAKE_LRELEASE):exists($$(HOST_DIR)/bin/lrelease):QMAKE_LRELEASE = $$(HOST_DIR)/bin/lrelease
 # 3.) Linux Qt Creator arm cross compile: QT_INSTALL_BINS is NOT available, but host tools should be available in QTDIR
-exists($$(QTDIR)/bin/lupdate):QMAKE_LUPDATE *= $$(QTDIR)/bin/lupdate
-exists($$(QTDIR)/bin/lrelease):QMAKE_LRELEASE *= $$(QTDIR)/bin/lrelease
+isEmpty(QMAKE_LUPDATE):exists($$(QTDIR)/bin/lupdate):QMAKE_LUPDATE = $$(QTDIR)/bin/lupdate
+isEmpty(QMAKE_LRELEASE):exists($$(QTDIR)/bin/lrelease):QMAKE_LRELEASE = $$(QTDIR)/bin/lrelease
 # 4.) Fallback: custom env var QT_LINGUIST_DIR (which can also be used to override the tools found in the path)
-exists($$(QT_LINGUIST_DIR)/lupdate):QMAKE_LUPDATE *= $$(QT_LINGUIST_DIR)/lupdate
-exists($$(QT_LINGUIST_DIR)/lrelease):QMAKE_LRELEASE *= $$(QT_LINGUIST_DIR)/lrelease
-# 5.) Last option: check path, plain and simple. (Would most likely be enough on most systems...)
+isEmpty(QMAKE_LUPDATE):exists($$(QT_LINGUIST_DIR)/lupdate):QMAKE_LUPDATE = $$(QT_LINGUIST_DIR)/lupdate
+isEmpty(QMAKE_LRELEASE):exists($$(QT_LINGUIST_DIR)/lrelease):QMAKE_LRELEASE = $$(QT_LINGUIST_DIR)/lrelease
+# 5.) Last option: check path, plain and simple. (Would most likely be enough on most systems, except Ubuntu with an incomplete Qt installation where it's a symlink to qtchooser...)
 if(isEmpty(QMAKE_LUPDATE)) {
     win32:QMAKE_LUPDATE    = $$system(where lupdate)
     unix|mac:QMAKE_LUPDATE = $$system(which lupdate)
