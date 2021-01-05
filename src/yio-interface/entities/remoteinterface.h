@@ -71,11 +71,11 @@ class RemoteDef : public QObject {
         F_DIGIT_ENTER,
 
         // navigation
-        F_CURSOR_UP,
-        F_CURSOR_DOWN,
-        F_CURSOR_LEFT,
-        F_CURSOR_RIGHT,
-        F_CURSOR_OK,
+        F_UP,
+        F_DOWN,
+        F_LEFT,
+        F_RIGHT,
+        F_OK,
         F_BACK,
         F_HOME,
         F_MENU,
@@ -173,11 +173,11 @@ class RemoteDef : public QObject {
         C_DIGIT_ENTER,
 
         // navigation
-        C_CURSOR_UP,
-        C_CURSOR_DOWN,
-        C_CURSOR_LEFT,
-        C_CURSOR_RIGHT,
-        C_CURSOR_OK,
+        C_UP,
+        C_DOWN,
+        C_LEFT,
+        C_RIGHT,
+        C_OK,
         C_BACK,
         C_HOME,
         C_MENU,
