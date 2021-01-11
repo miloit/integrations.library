@@ -29,6 +29,7 @@ const QString Integration::KEY_ENTITY_ID          = CFG_KEY_ENTITY_ID;
 const QString Integration::KEY_AREA               = CFG_KEY_AREA;
 const QString Integration::KEY_INTEGRATION        = CFG_KEY_INTEGRATION;
 const QString Integration::KEY_SUPPORTED_FEATURES = CFG_KEY_SUPPORTED_FEATURES;
+const QString Integration::KEY_CUSTOM_FEATURES    = CFG_KEY_CUSTOM_FEATURES;
 const QString Integration::KEY_TYPE               = CFG_KEY_TYPE;
 const QString Integration::KEY_MDNS               = CFG_KEY_MDNS;
 const QString Integration::KEY_WORKERTHREAD       = CFG_KEY_WORKERTHREAD;
@@ -75,7 +76,8 @@ Integration::Integration(Plugin* plugin)
 Integration::~Integration() {}
 
 bool Integration::addAvailableEntity(const QString& entityId, const QString& type, const QString& integration,
-                                     const QString& friendlyName, const QStringList& supportedFeatures) {
+                                     const QString& friendlyName, const QStringList& supportedFeatures,
+                                     const QStringList& customFeatures) {
     // if the entity is already in the list, skip
     for (int i = 0; i < m_allAvailableEntities.length(); i++) {
         if (m_allAvailableEntities[i].toMap().value(Integration::KEY_ENTITY_ID).toString() == entityId) {
@@ -90,6 +92,9 @@ bool Integration::addAvailableEntity(const QString& entityId, const QString& typ
         entity.insert(Integration::KEY_INTEGRATION, integration);
         entity.insert(Integration::KEY_FRIENDLYNAME, friendlyName);
         entity.insert(Integration::KEY_SUPPORTED_FEATURES, supportedFeatures);
+        if (customFeatures.size() > 0) {
+            entity.insert(Integration::KEY_CUSTOM_FEATURES, customFeatures);
+        }
         m_allAvailableEntities.append(entity);
         return true;
     } else {

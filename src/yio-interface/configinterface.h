@@ -34,6 +34,7 @@
 #define CFG_KEY_AREA "area"
 #define CFG_KEY_INTEGRATION "integration"
 #define CFG_KEY_SUPPORTED_FEATURES "supported_features"
+#define CFG_KEY_CUSTOM_FEATURES "custom_features"
 #define CFG_KEY_TYPE "type"
 #define CFG_KEY_MDNS "mdns"
 #define CFG_KEY_WORKERTHREAD "worker_thread"

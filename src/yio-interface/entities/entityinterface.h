@@ -59,6 +59,10 @@ class EntityInterface {
     // send command to the integration
     virtual void command(int command, const QVariant& param) = 0;  // Use Command enum C_XXXX
 
+    // custom buttons
+    virtual QStringList customButtons() = 0;
+    virtual void clickCustomButton(int index) = 0;
+
     // update an entity's attributes
     virtual bool update(const QVariantMap& attributes) = 0;
     virtual bool updateAttrByName(const QString& attrName, const QVariant& value) = 0;
