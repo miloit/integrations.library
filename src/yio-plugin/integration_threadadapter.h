@@ -41,7 +41,7 @@ class IntegrationThreadAdapter : public Integration {
                                       Plugin*      parent);
     ~IntegrationThreadAdapter() override;
 
- public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void connect() override;
     void disconnect() override;
     void enterStandby() override;

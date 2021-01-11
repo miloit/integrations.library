@@ -71,7 +71,7 @@ class ListTvChannelModel : public QAbstractListModel {
 
     void append(const TvChannelModelItem& o);
 
- public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void setCount(int count);
 
  signals:

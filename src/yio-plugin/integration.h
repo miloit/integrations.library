@@ -93,7 +93,7 @@ class Integration : public QObject, public IntegrationInterface {
     void disconnected();
     void stateChanged();
 
- public slots:                       // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void connect() override = 0;     // Must be implemented by integration
     void disconnect() override = 0;  // Must be implemented by integration
     void enterStandby() override {}  // Can be overriden by integration

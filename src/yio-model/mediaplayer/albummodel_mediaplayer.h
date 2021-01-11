@@ -66,7 +66,7 @@ class ListModel : public QAbstractListModel {
 
     void append(const ModelItem& o);
 
- public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void setCount(int count);
 
  signals:

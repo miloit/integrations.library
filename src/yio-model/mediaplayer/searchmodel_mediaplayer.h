@@ -63,7 +63,7 @@ class SearchModel : public QAbstractListModel {
     Q_INVOKABLE QObject* returnSubModel(int index) { return m_data.at(index)->item_model(); }
     Q_INVOKABLE void     clear();
 
- public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void setCount(int count);
 
  signals:
@@ -113,7 +113,7 @@ class SearchModelList : public QAbstractListModel {
 
     void append(const SearchModelListItem& o);
 
- public slots:  // NOLINT open issue: https://github.com/cpplint/cpplint/pull/99
+ public slots:
     void setCount(int count);
 
  signals:
