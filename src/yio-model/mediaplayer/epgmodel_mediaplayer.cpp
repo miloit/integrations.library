@@ -47,8 +47,10 @@ QVariant ListEPGModel::data(const QModelIndex &index, int role) const {
         return item.itemHeight();
     case TypeRole:
         return item.itemType();
-    case ColorRole:
-        return item.itemColor();
+    case EpgItemColorRole:
+        return item.itemEpgItemColor();
+    case EpgItemTextColorRole:
+        return item.itemEpgItemTextColor();
     case TitleRole:
         return item.itemTitle();
     case SubTitleRole:
@@ -75,7 +77,8 @@ QHash<int, QByteArray> ListEPGModel::roleNames() const {
     roles[WidthRole] = "item_width";
     roles[HeightRole] = "item_height";
     roles[TypeRole] = "item_type";
-    roles[ColorRole] = "item_color";
+    roles[EpgItemColorRole] = "item_epgItemColor";
+    roles[EpgItemTextColorRole] = "item_epgItemTextColor";
     roles[TitleRole] = "item_title";
     roles[SubTitleRole] = "item_subtitle";
     roles[DescriptionRole] = "item_description";
@@ -106,12 +109,12 @@ void ListEPGModel::setCount(int count) {
 
 void BrowseEPGModel::addEPGItem(const QString &key, const int &xCoordinate,
                                 const int &column, const int &width, const int& height, const QString& type,
-                                const QString& color, const QString& title, const QString& subtitle,
-                                const QString& description, const QString& startTime, const QString& endTime,
-                                const QString& imageUrl, const QVariant& commands) {
+                                const QString& epgItemColor, const QString& epgItemTextColor, const QString& title,
+                                const QString& subtitle, const QString& description, const QString& startTime,
+                                const QString& endTime, const QString& imageUrl, const QVariant& commands) {
     ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
-    EPGModelItem  item = EPGModelItem(key, xCoordinate, column, width, height, type, color, title,
-                                      subtitle, description, startTime, endTime, imageUrl, commands);
+    EPGModelItem  item = EPGModelItem(key, xCoordinate, column, width, height, type, epgItemColor, epgItemTextColor,
+                                      title, subtitle, description, startTime, endTime, imageUrl, commands);
     model->append(item);
     emit modelChanged();
 }
