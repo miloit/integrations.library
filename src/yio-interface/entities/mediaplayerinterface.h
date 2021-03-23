@@ -114,6 +114,7 @@ class MediaPlayerDef : public QObject {
         C_CHANNEL_UP,
         C_CHANNEL_DOWN,
         C_MUTE,
+        C_BACK,
         C_BROWSE,
         C_SEARCH,
         C_MEDIAPLAYERTEXTINPUT,
