@@ -85,7 +85,7 @@ class ListTvChannelModel : public QAbstractListModel {
 class BrowseTvChannelModel : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
-    Q_PROPERTY(QString time READ time NOTIFY idChanged)
+    Q_PROPERTY(QString time READ time NOTIFY timeChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString subtitle READ subtitle NOTIFY subtitleChanged)
     Q_PROPERTY(QString type READ type NOTIFY typeChanged)
