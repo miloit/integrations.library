@@ -72,8 +72,18 @@ void ListTvChannelModel::append(const TvChannelModelItem &o) {
 
     // Emit changed signals
     emit countChanged(count());
-
     endInsertRows();
+}
+
+void ListTvChannelModel::reset() {
+
+    beginResetModel();
+    m_data.clear();
+
+
+    // Emit changed signals
+    emit countChanged(count());
+    endResetModel();
 }
 
 void ListTvChannelModel::setCount(int count) {
@@ -89,5 +99,11 @@ void BrowseTvChannelModel::addtvchannelItem(const QString &key, const QString &t
     ListTvChannelModel *model = static_cast<ListTvChannelModel *>(m_model);
     TvChannelModelItem  item = TvChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
     model->append(item);
+    emit modelChanged();
+}
+
+void BrowseTvChannelModel::reset() {
+    ListTvChannelModel *model = static_cast<ListTvChannelModel *>(m_model);
+    model->reset();
     emit modelChanged();
 }

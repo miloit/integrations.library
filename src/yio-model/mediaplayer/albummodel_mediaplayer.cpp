@@ -71,6 +71,7 @@ void ListModel::append(const ModelItem &o) {
     emit countChanged(count());
 
     endInsertRows();
+
 }
 
 void ListModel::setCount(int count) {

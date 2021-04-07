@@ -100,6 +100,18 @@ void ListEPGModel::append(const EPGModelItem &o) {
     endInsertRows();
 }
 
+void ListEPGModel::reset() {
+
+    beginResetModel();
+    m_data.clear();
+
+
+    // Emit changed signals
+    emit countChanged(count());
+    endResetModel();
+}
+
+
 void ListEPGModel::setCount(int count) {
     if (m_count == count) return;
 
@@ -116,5 +128,11 @@ void BrowseEPGModel::addEPGItem(const QString &key, const int &xCoordinate,
     EPGModelItem  item = EPGModelItem(key, xCoordinate, column, width, height, type, epgItemColor, epgItemTextColor,
                                       title, subtitle, description, startTime, endTime, imageUrl, commands);
     model->append(item);
+    emit modelChanged();
+}
+
+void BrowseEPGModel::reset() {
+    ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
+    model->reset();
     emit modelChanged();
 }

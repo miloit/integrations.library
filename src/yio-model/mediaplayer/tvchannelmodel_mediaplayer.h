@@ -70,6 +70,7 @@ class ListTvChannelModel : public QAbstractListModel {
     QHash<int, QByteArray> roleNames() const;
 
     void append(const TvChannelModelItem& o);
+    void reset();
 
  public slots:
     void setCount(int count);
@@ -113,7 +114,7 @@ class BrowseTvChannelModel : public QObject {
 
     void addtvchannelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
                           const QString& type, const QString& imageUrl, const QVariant& commands);
-
+    void reset();
  signals:
     void idChanged();
     void timeChanged();
