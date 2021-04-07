@@ -24,7 +24,9 @@
 
 ListTvChannelModel::ListTvChannelModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
 
-int ListTvChannelModel::count() const { return m_count; }
+int ListTvChannelModel::count() const {
+    return m_count;
+}
 
 int ListTvChannelModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)
@@ -76,10 +78,8 @@ void ListTvChannelModel::append(const TvChannelModelItem &o) {
 }
 
 void ListTvChannelModel::reset() {
-
     beginResetModel();
     m_data.clear();
-
 
     // Emit changed signals
     emit countChanged(count());
@@ -93,9 +93,9 @@ void ListTvChannelModel::setCount(int count) {
     emit countChanged(m_count);
 }
 
-void BrowseTvChannelModel::addtvchannelItem(const QString &key, const QString &time,
-                                            const QString &title, const QString &subtitle, const QString &type,
-                          const QString &imageUrl, const QVariant &commands) {
+void BrowseTvChannelModel::addtvchannelItem(const QString &key, const QString &time, const QString &title,
+                                            const QString &subtitle, const QString &type, const QString &imageUrl,
+                                            const QVariant &commands) {
     ListTvChannelModel *model = static_cast<ListTvChannelModel *>(m_model);
     TvChannelModelItem  item = TvChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
     model->append(item);
