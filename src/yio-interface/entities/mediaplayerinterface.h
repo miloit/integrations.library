@@ -88,7 +88,7 @@ class MediaPlayerDef : public QObject {
         F_MENU,
         F_LIST,
         F_SPEAKER_CONTROL,
-        F_TVCHANNELLIST,
+        F_MEDIAPLAYERCHANNELLIST,
         F_MEDIAPLAYERREMOTE,
         F_MEDIAPLAYEREPGVIEW
     };
@@ -122,7 +122,7 @@ class MediaPlayerDef : public QObject {
         C_PLAY_ITEM,
         C_GETALBUM,
         C_GETPLAYLIST,
-        C_GETTVCHANNELLIST,
+        C_GETMEDIAPLAYERCHANNELLIST,
         C_GETMEDIAPLAYERREMOTE,
         C_GETMEDIAPLAYEREPGVIEW,
         C_QUEUE

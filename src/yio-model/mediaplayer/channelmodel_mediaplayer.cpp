@@ -94,8 +94,8 @@ void ListChannelModel::setCount(int count) {
 }
 
 void BrowseChannelModel::addchannelItem(const QString &key, const QString &time, const QString &title,
-                                            const QString &subtitle, const QString &type, const QString &imageUrl,
-                                            const QVariant &commands) {
+                                        const QString &subtitle, const QString &type, const QString &imageUrl,
+                                        const QVariant &commands) {
     ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
     ChannelModelItem  item = ChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
     model->append(item);
@@ -105,5 +105,9 @@ void BrowseChannelModel::addchannelItem(const QString &key, const QString &time,
 void BrowseChannelModel::reset() {
     ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
     model->reset();
+    emit modelChanged();
+}
+
+void BrowseChannelModel::update() {
     emit modelChanged();
 }

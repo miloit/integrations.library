@@ -111,6 +111,7 @@ void ListEPGModel::reset() {
     endResetModel();
 }
 
+
 void ListEPGModel::setCount(int count) {
     if (m_count == count) return;
 
@@ -135,3 +136,5 @@ void BrowseEPGModel::reset() {
     model->reset();
     emit modelChanged();
 }
+
+

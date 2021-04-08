@@ -30,7 +30,7 @@
 class ChannelModelItem {
  public:
     ChannelModelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
-                       const QString& type, const QString& imageUrl, const QVariant& commands)
+                     const QString& type, const QString& imageUrl, const QVariant& commands)
         : m_key(key),
           m_time(time),
           m_title(title),
@@ -90,7 +90,7 @@ class ListChannelModel : public QAbstractListModel {
     void countChanged(int count);
 
  private:
-    int                       m_count;
+    int                     m_count;
     QList<ChannelModelItem> m_data;
 };
 
@@ -107,8 +107,8 @@ class BrowseChannelModel : public QObject {
 
  public:
     BrowseChannelModel(const QString& id, const QString& time, const QString& title, const QString& subtitle,
-                         const QString& type, const QString& imageUrl, const QStringList& commands = {},
-                         QObject* parent = nullptr)
+                       const QString& type, const QString& imageUrl, const QStringList& commands = {},
+                       QObject* parent = nullptr)
         : m_id(id),
           m_time(time),
           m_title(title),
@@ -129,8 +129,9 @@ class BrowseChannelModel : public QObject {
     QStringList commands() { return m_commands; }
 
     void addchannelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
-                          const QString& type, const QString& imageUrl, const QVariant& commands);
+                        const QString& type, const QString& imageUrl, const QVariant& commands);
     void reset();
+    void update();
  signals:
     void idChanged();
     void timeChanged();
