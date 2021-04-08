@@ -20,22 +20,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *****************************************************************************/
 
-#include "tvchannelmodel_mediaplayer.h"
+#include "channelmodel_mediaplayer.h"
 
-ListTvChannelModel::ListTvChannelModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
+ListChannelModel::ListChannelModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
 
-int ListTvChannelModel::count() const {
+int ListChannelModel::count() const {
     return m_count;
 }
 
-int ListTvChannelModel::rowCount(const QModelIndex &p) const {
+int ListChannelModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)
     return m_data.size();
 }
 
-QVariant ListTvChannelModel::data(const QModelIndex &index, int role) const {
+QVariant ListChannelModel::data(const QModelIndex &index, int role) const {
     if (index.row() < 0 || index.row() >= m_data.count()) return QVariant();
-    const TvChannelModelItem &item = m_data[index.row()];
+    const ChannelModelItem &item = m_data[index.row()];
     switch (role) {
         case KeyRole:
             return item.itemKey();
@@ -55,7 +55,7 @@ QVariant ListTvChannelModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QHash<int, QByteArray> ListTvChannelModel::roleNames() const {
+QHash<int, QByteArray> ListChannelModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[KeyRole] = "item_key";
     roles[TimeRole] = "item_time";
@@ -67,7 +67,7 @@ QHash<int, QByteArray> ListTvChannelModel::roleNames() const {
     return roles;
 }
 
-void ListTvChannelModel::append(const TvChannelModelItem &o) {
+void ListChannelModel::append(const ChannelModelItem &o) {
     int i = m_data.size();
     beginInsertRows(QModelIndex(), i, i);
     m_data.append(o);
@@ -77,7 +77,7 @@ void ListTvChannelModel::append(const TvChannelModelItem &o) {
     endInsertRows();
 }
 
-void ListTvChannelModel::reset() {
+void ListChannelModel::reset() {
     beginResetModel();
     m_data.clear();
 
@@ -86,24 +86,24 @@ void ListTvChannelModel::reset() {
     endResetModel();
 }
 
-void ListTvChannelModel::setCount(int count) {
+void ListChannelModel::setCount(int count) {
     if (m_count == count) return;
 
     m_count = count;
     emit countChanged(m_count);
 }
 
-void BrowseTvChannelModel::addtvchannelItem(const QString &key, const QString &time, const QString &title,
+void BrowseChannelModel::addchannelItem(const QString &key, const QString &time, const QString &title,
                                             const QString &subtitle, const QString &type, const QString &imageUrl,
                                             const QVariant &commands) {
-    ListTvChannelModel *model = static_cast<ListTvChannelModel *>(m_model);
-    TvChannelModelItem  item = TvChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
+    ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
+    ChannelModelItem  item = ChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
     model->append(item);
     emit modelChanged();
 }
 
-void BrowseTvChannelModel::reset() {
-    ListTvChannelModel *model = static_cast<ListTvChannelModel *>(m_model);
+void BrowseChannelModel::reset() {
+    ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
     model->reset();
     emit modelChanged();
 }
