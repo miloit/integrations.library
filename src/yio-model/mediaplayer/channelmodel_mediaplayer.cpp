@@ -109,5 +109,6 @@ void BrowseChannelModel::reset() {
 }
 
 void BrowseChannelModel::update() {
+    ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
     emit modelChanged();
 }

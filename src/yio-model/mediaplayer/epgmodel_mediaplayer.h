@@ -117,6 +117,7 @@ class ListEPGModel : public QAbstractListModel {
 
     void append(const EPGModelItem& o);
     void reset();
+
  public slots:
     void setCount(int count);
 
@@ -193,6 +194,7 @@ class BrowseEPGModel : public QObject {
                     const QString& title, const QString& subtitle, const QString& description, const QString& startTime,
                     const QString& endTime, const QString& imageUrl, const QVariant& commands);
     void reset();
+    void update();
  signals:
     void idChanged();
     void xCoordinateChanged();

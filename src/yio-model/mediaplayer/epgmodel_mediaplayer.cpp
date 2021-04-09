@@ -137,4 +137,7 @@ void BrowseEPGModel::reset() {
     emit modelChanged();
 }
 
-
+void BrowseEPGModel::update() {
+    ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
+    emit modelChanged();
+}
