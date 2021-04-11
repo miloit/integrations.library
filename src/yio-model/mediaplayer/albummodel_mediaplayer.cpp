@@ -24,7 +24,9 @@
 
 ListModel::ListModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
 
-int ListModel::count() const { return m_count; }
+int ListModel::count() const {
+    return m_count;
+}
 
 int ListModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)

@@ -24,7 +24,9 @@
 
 ListEPGModel::ListEPGModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
 
-int ListEPGModel::count() const { return m_count; }
+int ListEPGModel::count() const {
+    return m_count;
+}
 
 int ListEPGModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)
@@ -35,36 +37,36 @@ QVariant ListEPGModel::data(const QModelIndex &index, int role) const {
     if (index.row() < 0 || index.row() >= m_data.count()) return QVariant();
     const EPGModelItem &item = m_data[index.row()];
     switch (role) {
-    case KeyRole:
-        return item.itemKey();
-    case XCoordinateRole:
-        return item.itemXCoordinate();
-    case ColumnRole:
-        return item.itemColumn();
-    case WidthRole:
-        return item.itemWidth();
-    case HeightRole:
-        return item.itemHeight();
-    case TypeRole:
-        return item.itemType();
-    case EpgItemColorRole:
-        return item.itemEpgItemColor();
-    case EpgItemTextColorRole:
-        return item.itemEpgItemTextColor();
-    case TitleRole:
-        return item.itemTitle();
-    case SubTitleRole:
-        return item.itemSubTitle();
-    case DescriptionRole:
-        return item.itemDescription();
-    case StartTimeRole:
-        return item.itemStartTime();
-    case EndTimeRole:
-        return item.itemEndTime();
-    case ImageUrlRole:
-        return item.itemImageUrl();
-    case CommandsRole:
-        return item.itemCommands();
+        case KeyRole:
+            return item.itemKey();
+        case XCoordinateRole:
+            return item.itemXCoordinate();
+        case ColumnRole:
+            return item.itemColumn();
+        case WidthRole:
+            return item.itemWidth();
+        case HeightRole:
+            return item.itemHeight();
+        case TypeRole:
+            return item.itemType();
+        case EpgItemColorRole:
+            return item.itemEpgItemColor();
+        case EpgItemTextColorRole:
+            return item.itemEpgItemTextColor();
+        case TitleRole:
+            return item.itemTitle();
+        case SubTitleRole:
+            return item.itemSubTitle();
+        case DescriptionRole:
+            return item.itemDescription();
+        case StartTimeRole:
+            return item.itemStartTime();
+        case EndTimeRole:
+            return item.itemEndTime();
+        case ImageUrlRole:
+            return item.itemImageUrl();
+        case CommandsRole:
+            return item.itemCommands();
     }
     return QVariant();
 }
@@ -100,6 +102,16 @@ void ListEPGModel::append(const EPGModelItem &o) {
     endInsertRows();
 }
 
+void ListEPGModel::reset() {
+    beginResetModel();
+    m_data.clear();
+
+    // Emit changed signals
+    emit countChanged(count());
+    endResetModel();
+}
+
+
 void ListEPGModel::setCount(int count) {
     if (m_count == count) return;
 
@@ -107,14 +119,25 @@ void ListEPGModel::setCount(int count) {
     emit countChanged(m_count);
 }
 
-void BrowseEPGModel::addEPGItem(const QString &key, const int &xCoordinate,
-                                const int &column, const int &width, const int& height, const QString& type,
-                                const QString& epgItemColor, const QString& epgItemTextColor, const QString& title,
-                                const QString& subtitle, const QString& description, const QString& startTime,
-                                const QString& endTime, const QString& imageUrl, const QVariant& commands) {
+void BrowseEPGModel::addEPGItem(const QString &key, const int &xCoordinate, const int &column, const int &width,
+                                const int &height, const QString &type, const QString &epgItemColor,
+                                const QString &epgItemTextColor, const QString &title, const QString &subtitle,
+                                const QString &description, const QString &startTime, const QString &endTime,
+                                const QString &imageUrl, const QVariant &commands) {
     ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
     EPGModelItem  item = EPGModelItem(key, xCoordinate, column, width, height, type, epgItemColor, epgItemTextColor,
-                                      title, subtitle, description, startTime, endTime, imageUrl, commands);
+                                     title, subtitle, description, startTime, endTime, imageUrl, commands);
     model->append(item);
+    emit modelChanged();
+}
+
+void BrowseEPGModel::reset() {
+    ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
+    model->reset();
+    emit modelChanged();
+}
+
+void BrowseEPGModel::update() {
+    ListEPGModel *model = static_cast<ListEPGModel *>(m_model);
     emit modelChanged();
 }

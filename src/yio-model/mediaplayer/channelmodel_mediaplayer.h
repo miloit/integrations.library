@@ -27,13 +27,17 @@
 #include <QVariant>
 #include <QtDebug>
 
-class TvChannelModelItem {
+class ChannelModelItem {
  public:
-    TvChannelModelItem(const QString& key, const QString& time, const QString& title,
-                       const QString& subtitle, const QString& type,
-              const QString& imageUrl, const QVariant& commands)
-        : m_key(key), m_time(time), m_title(title), m_subtitle(subtitle),
-          m_type(type), m_imageUrl(imageUrl), m_commands(commands) {}
+    ChannelModelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
+                     const QString& type, const QString& imageUrl, const QVariant& commands)
+        : m_key(key),
+          m_time(time),
+          m_title(title),
+          m_subtitle(subtitle),
+          m_type(type),
+          m_imageUrl(imageUrl),
+          m_commands(commands) {}
 
     QString  itemKey() const { return m_key; }
     QString  itemTime() const { return m_time; }
@@ -53,23 +57,31 @@ class TvChannelModelItem {
     QVariant m_commands;
 };
 
-class ListTvChannelModel : public QAbstractListModel {
+class ListChannelModel : public QAbstractListModel {
     Q_OBJECT
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
 
  public:
-    enum SearchRoles { KeyRole = Qt::UserRole + 1, TimeRole, TitleRole, SubTitleRole,
-                       TypeRole, ImageUrlRole, CommandsRole };
+    enum SearchRoles {
+        KeyRole = Qt::UserRole + 1,
+        TimeRole,
+        TitleRole,
+        SubTitleRole,
+        TypeRole,
+        ImageUrlRole,
+        CommandsRole
+    };
 
-    explicit ListTvChannelModel(QObject* parent = nullptr);
-    ~ListTvChannelModel() {}
+    explicit ListChannelModel(QObject* parent = nullptr);
+    ~ListChannelModel() {}
 
     int                    count() const;
     int                    rowCount(const QModelIndex& p = QModelIndex()) const;
     QVariant               data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void append(const TvChannelModelItem& o);
+    void append(const ChannelModelItem& o);
+    void reset();
 
  public slots:
     void setCount(int count);
@@ -78,11 +90,11 @@ class ListTvChannelModel : public QAbstractListModel {
     void countChanged(int count);
 
  private:
-    int              m_count;
-    QList<TvChannelModelItem> m_data;
+    int                     m_count;
+    QList<ChannelModelItem> m_data;
 };
 
-class BrowseTvChannelModel : public QObject {
+class BrowseChannelModel : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
     Q_PROPERTY(QString time READ time NOTIFY timeChanged)
@@ -94,13 +106,18 @@ class BrowseTvChannelModel : public QObject {
     Q_PROPERTY(QStringList commands READ commands NOTIFY commandsChanged)
 
  public:
-    BrowseTvChannelModel(const QString& id, const QString& time,
-                         const QString& title, const QString& subtitle, const QString& type,
-                         const QString& imageUrl, const QStringList& commands = {}, QObject* parent = nullptr)
-        : m_id(id), m_time(time), m_title(title), m_subtitle(subtitle), m_type(type),
-          m_imageUrl(imageUrl), m_commands(commands) {}
+    BrowseChannelModel(const QString& id, const QString& time, const QString& title, const QString& subtitle,
+                       const QString& type, const QString& imageUrl, const QStringList& commands = {},
+                       QObject* parent = nullptr)
+        : m_id(id),
+          m_time(time),
+          m_title(title),
+          m_subtitle(subtitle),
+          m_type(type),
+          m_imageUrl(imageUrl),
+          m_commands(commands) {}
 
-    ~BrowseTvChannelModel() {}
+    ~BrowseChannelModel() {}
 
     QString     id() { return m_id; }
     QString     time() { return m_time; }
@@ -111,9 +128,10 @@ class BrowseTvChannelModel : public QObject {
     QObject*    model() { return m_model; }
     QStringList commands() { return m_commands; }
 
-    void addtvchannelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
-                          const QString& type, const QString& imageUrl, const QVariant& commands);
-
+    void addchannelItem(const QString& key, const QString& time, const QString& title, const QString& subtitle,
+                        const QString& type, const QString& imageUrl, const QVariant& commands);
+    void reset();
+    void update();
  signals:
     void idChanged();
     void timeChanged();
@@ -131,6 +149,6 @@ class BrowseTvChannelModel : public QObject {
     QString     m_subtitle;
     QString     m_type;
     QString     m_imageUrl;
-    QObject*    m_model = new ListTvChannelModel();
+    QObject*    m_model = new ListChannelModel();
     QStringList m_commands;
 };

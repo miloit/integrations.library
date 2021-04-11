@@ -29,21 +29,31 @@
 
 class EPGModelItem {
  public:
-    EPGModelItem(const QString& key, const int& xCoordinate, const int& column,
-                       const int& width, const int& height, const QString& type, const QString& epgItemColor,
-                 const QString& epgItemTextColor, const QString& title, const QString& subtitle,
-                 const QString& description, const QString& startTime, const QString& endTime,
-                 const QString& imageUrl, const QVariant& commands)
-        : m_key(key), m_xCoordinate(xCoordinate), m_column(column), m_width(width), m_height(height),
-          m_type(type), m_epgItemColor(epgItemColor), m_epgItemTextColor(epgItemTextColor), m_title(title),
-          m_subtitle(subtitle), m_description(description), m_startTime(startTime), m_endTime(endTime),
-          m_imageUrl(imageUrl), m_commands(commands) {}
+    EPGModelItem(const QString& key, const int& xCoordinate, const int& column, const int& width, const int& height,
+                 const QString& type, const QString& epgItemColor, const QString& epgItemTextColor,
+                 const QString& title, const QString& subtitle, const QString& description, const QString& startTime,
+                 const QString& endTime, const QString& imageUrl, const QVariant& commands)
+        : m_key(key),
+          m_xCoordinate(xCoordinate),
+          m_column(column),
+          m_width(width),
+          m_height(height),
+          m_type(type),
+          m_epgItemColor(epgItemColor),
+          m_epgItemTextColor(epgItemTextColor),
+          m_title(title),
+          m_subtitle(subtitle),
+          m_description(description),
+          m_startTime(startTime),
+          m_endTime(endTime),
+          m_imageUrl(imageUrl),
+          m_commands(commands) {}
 
     QString  itemKey() const { return m_key; }
-    int  itemXCoordinate() const { return m_xCoordinate; }
-    int  itemColumn() const { return m_column; }
-    int  itemWidth() const { return m_width; }
-    int  itemHeight() const { return m_height; }
+    int      itemXCoordinate() const { return m_xCoordinate; }
+    int      itemColumn() const { return m_column; }
+    int      itemWidth() const { return m_width; }
+    int      itemHeight() const { return m_height; }
     QString  itemType() const { return m_type; }
     QString  itemEpgItemColor() const { return m_epgItemColor; }
     QString  itemEpgItemTextColor() const { return m_epgItemTextColor; }
@@ -57,13 +67,13 @@ class EPGModelItem {
 
  private:
     QString  m_key;
-    int  m_xCoordinate;
-    int  m_column;
-    int  m_width;
-    int m_height;
+    int      m_xCoordinate;
+    int      m_column;
+    int      m_width;
+    int      m_height;
     QString  m_type;
     QString  m_epgItemColor;
-    QString m_epgItemTextColor;
+    QString  m_epgItemTextColor;
     QString  m_title;
     QString  m_subtitle;
     QString  m_description;
@@ -78,9 +88,24 @@ class ListEPGModel : public QAbstractListModel {
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
 
  public:
-    enum SearchRoles { KeyRole = Qt::UserRole + 1, XCoordinateRole, ColumnRole, WidthRole,
-                       HeightRole, TypeRole, EpgItemColorRole, EpgItemTextColorRole, AnchorleftRole, TitleRole,
-                       SubTitleRole, DescriptionRole, StartTimeRole, EndTimeRole, ImageUrlRole, CommandsRole };
+    enum SearchRoles {
+        KeyRole = Qt::UserRole + 1,
+        XCoordinateRole,
+        ColumnRole,
+        WidthRole,
+        HeightRole,
+        TypeRole,
+        EpgItemColorRole,
+        EpgItemTextColorRole,
+        AnchorleftRole,
+        TitleRole,
+        SubTitleRole,
+        DescriptionRole,
+        StartTimeRole,
+        EndTimeRole,
+        ImageUrlRole,
+        CommandsRole
+    };
 
     explicit ListEPGModel(QObject* parent = nullptr);
     ~ListEPGModel() {}
@@ -91,6 +116,7 @@ class ListEPGModel : public QAbstractListModel {
     QHash<int, QByteArray> roleNames() const;
 
     void append(const EPGModelItem& o);
+    void reset();
 
  public slots:
     void setCount(int count);
@@ -99,7 +125,7 @@ class ListEPGModel : public QAbstractListModel {
     void countChanged(int count);
 
  private:
-    int              m_count;
+    int                 m_count;
     QList<EPGModelItem> m_data;
 };
 
@@ -123,24 +149,34 @@ class BrowseEPGModel : public QObject {
     Q_PROPERTY(QStringList commands READ commands NOTIFY commandsChanged)
 
  public:
-    BrowseEPGModel(const QString& id, const int& xCoordinate,
-                         const int& column, const int& width, const int& height, const QString& type,
-                   const QString& epgItemColor, const QString& epgItemTextColor, const QString& title,
-                   const QString& subtitle, const QString& description, const QString& startTime,
+    BrowseEPGModel(const QString& id, const int& xCoordinate, const int& column, const int& width, const int& height,
+                   const QString& type, const QString& epgItemColor, const QString& epgItemTextColor,
+                   const QString& title, const QString& subtitle, const QString& description, const QString& startTime,
                    const QString& endTime, const QString& imageUrl, const QStringList& commands = {},
                    QObject* parent = nullptr)
-        : m_id(id), m_xCoordinate(xCoordinate), m_column(column), m_width(width), m_height(height),
-          m_type(type), m_epgItemColor(epgItemColor), m_epgItemTextColor(epgItemTextColor), m_title(title),
-          m_subtitle(subtitle), m_description(description), m_startTime(startTime), m_endTime(endTime),
-          m_imageUrl(imageUrl), m_commands(commands) {}
+        : m_id(id),
+          m_xCoordinate(xCoordinate),
+          m_column(column),
+          m_width(width),
+          m_height(height),
+          m_type(type),
+          m_epgItemColor(epgItemColor),
+          m_epgItemTextColor(epgItemTextColor),
+          m_title(title),
+          m_subtitle(subtitle),
+          m_description(description),
+          m_startTime(startTime),
+          m_endTime(endTime),
+          m_imageUrl(imageUrl),
+          m_commands(commands) {}
 
     ~BrowseEPGModel() {}
 
     QString     id() { return m_id; }
-    int     xCoordinate() { return m_xCoordinate; }
-    int     column() { return m_column; }
-    int     width() { return m_width; }
-    int     height() {return m_height;}
+    int         xCoordinate() { return m_xCoordinate; }
+    int         column() { return m_column; }
+    int         width() { return m_width; }
+    int         height() { return m_height; }
     QString     type() { return m_type; }
     QString     epgItemColor() { return m_epgItemColor; }
     QString     epgItemTextColor() { return m_epgItemTextColor; }
@@ -153,12 +189,12 @@ class BrowseEPGModel : public QObject {
     QObject*    model() { return m_model; }
     QStringList commands() { return m_commands; }
 
-    void addEPGItem(const QString& key, const int& xCoordinate, const int& column, const int& width,
-                          const int& height, const QString& type, const QString& epgItemColor,
-                    const QString& epgItemTextColor, const QString& title, const QString& subtitle,
-                    const QString& description, const QString& startTime, const QString& endTime,
-                    const QString& imageUrl, const QVariant& commands);
-
+    void addEPGItem(const QString& key, const int& xCoordinate, const int& column, const int& width, const int& height,
+                    const QString& type, const QString& epgItemColor, const QString& epgItemTextColor,
+                    const QString& title, const QString& subtitle, const QString& description, const QString& startTime,
+                    const QString& endTime, const QString& imageUrl, const QVariant& commands);
+    void reset();
+    void update();
  signals:
     void idChanged();
     void xCoordinateChanged();
@@ -179,19 +215,19 @@ class BrowseEPGModel : public QObject {
 
  private:
     QString     m_id;
-    int     m_xCoordinate;
-    int     m_column;
-    int     m_width;
-    int     m_height;
+    int         m_xCoordinate;
+    int         m_column;
+    int         m_width;
+    int         m_height;
     QString     m_type;
     QString     m_epgItemColor;
     QString     m_epgItemTextColor;
     QString     m_title;
-    QString  m_subtitle;
-    QString  m_description;
-    QString  m_startTime;
-    QString  m_endTime;
-    QString  m_imageUrl;
+    QString     m_subtitle;
+    QString     m_description;
+    QString     m_startTime;
+    QString     m_endTime;
+    QString     m_imageUrl;
     QObject*    m_model = new ListEPGModel();
     QStringList m_commands;
 };
