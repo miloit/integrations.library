@@ -30,7 +30,7 @@
  */
 class IntegrationInterface {
  public:
-    enum States { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2 };
+    enum States { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2, STANDBY = 3 };
 
     virtual ~IntegrationInterface();
 
