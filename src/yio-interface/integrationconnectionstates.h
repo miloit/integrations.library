@@ -25,7 +25,7 @@
 class IntegrationConnectionStates {
     Q_GADGET
  public:
-    explicit IntegrationConnectionStates();
+    IntegrationConnectionStates();
 
     enum States { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2, STANDBY = 3 };
     Q_ENUM(States)
