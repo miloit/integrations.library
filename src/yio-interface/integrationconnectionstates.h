@@ -1,6 +1,5 @@
 /******************************************************************************
  *
- * Copyright (C) 2018-2019 Marton Borzak <hello@martonborzak.com>
  * Copyright (C) 2021 Michael Lörcher <MichaelLoercher@web.de>
  *
  * This file is part of the YIO-Remote software project.
