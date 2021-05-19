@@ -24,6 +24,7 @@
 
 class IntegrationConnectionStates {
     Q_GADGET
+
  public:
     IntegrationConnectionStates();
 
