@@ -31,9 +31,11 @@
  * @brief The IntegrationInterface must be implemented by the integration plugins.
  */
 class IntegrationInterface {
+    Q_GADGET
  public:
     //enum States { CONNECTED = 0, CONNECTING = 1, DISCONNECTED = 2, STANDBY = 3 };
     typedef IntegrationConnectionStates::States States;
+
 
     virtual ~IntegrationInterface();
 
