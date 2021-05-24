@@ -28,7 +28,6 @@ int ListChannelModel::count() const {
     return m_data.count();
 }
 
-
 int ListChannelModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)
     return m_data.size();
@@ -87,13 +86,6 @@ void ListChannelModel::reset() {
     endResetModel();
 }
 
-/*void ListChannelModel::setCount(int count) {
-    if (m_count == count) return;
-
-    m_count = count;
-    emit countChanged(m_count);
-}*/
-
 void BrowseChannelModel::addchannelItem(const QString &key, const QString &time, const QString &title,
                                         const QString &subtitle, const QString &type, const QString &imageUrl,
                                         const QVariant &commands) {
@@ -112,5 +104,5 @@ void BrowseChannelModel::reset() {
 
 void BrowseChannelModel::update() {
     ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
-    emit modelChanged();
+    emit              modelChanged();
 }
