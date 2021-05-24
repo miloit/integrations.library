@@ -22,11 +22,12 @@
 
 #include "channelmodel_mediaplayer.h"
 
-ListChannelModel::ListChannelModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
+ListChannelModel::ListChannelModel(QObject *parent) : QAbstractListModel(parent) {}
 
 int ListChannelModel::count() const {
-    return m_count;
+    return m_data.count();
 }
+
 
 int ListChannelModel::rowCount(const QModelIndex &p) const {
     Q_UNUSED(p)
@@ -86,12 +87,12 @@ void ListChannelModel::reset() {
     endResetModel();
 }
 
-void ListChannelModel::setCount(int count) {
+/*void ListChannelModel::setCount(int count) {
     if (m_count == count) return;
 
     m_count = count;
     emit countChanged(m_count);
-}
+}*/
 
 void BrowseChannelModel::addchannelItem(const QString &key, const QString &time, const QString &title,
                                         const QString &subtitle, const QString &type, const QString &imageUrl,
@@ -99,6 +100,7 @@ void BrowseChannelModel::addchannelItem(const QString &key, const QString &time,
     ListChannelModel *model = static_cast<ListChannelModel *>(m_model);
     ChannelModelItem  item = ChannelModelItem(key, time, title, subtitle, type, imageUrl, commands);
     model->append(item);
+
     emit modelChanged();
 }
 

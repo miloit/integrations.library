@@ -26,6 +26,8 @@
 #include <QObject>
 #include <QVariant>
 #include <QtDebug>
+#include <QQmlListProperty>
+#include <QtQml>
 
 class ChannelModelItem {
  public:
@@ -59,7 +61,7 @@ class ChannelModelItem {
 
 class ListChannelModel : public QAbstractListModel {
     Q_OBJECT
-    Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
+    //Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
 
  public:
     enum SearchRoles {
@@ -75,23 +77,25 @@ class ListChannelModel : public QAbstractListModel {
     explicit ListChannelModel(QObject* parent = nullptr);
     ~ListChannelModel() {}
 
+
+
     int                    count() const;
     int                    rowCount(const QModelIndex& p = QModelIndex()) const;
     QVariant               data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void append(const ChannelModelItem& o);
-    void reset();
+
 
  public slots:
-    void setCount(int count);
-
+    //Q_INVOKABLE void setCount(int count);
+    Q_INVOKABLE void append(const ChannelModelItem& o);
+    Q_INVOKABLE void reset();
 
  signals:
     void countChanged(int count);
 
  private:
-    int                     m_count;
+    //int                     m_count;
     QList<ChannelModelItem> m_data;
 };
 
