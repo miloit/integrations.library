@@ -25,7 +25,7 @@
 ListChannelModel::ListChannelModel(QObject *parent) : QAbstractListModel(parent) {}
 
 int ListChannelModel::count() const {
-    return m_data.count();
+    return m_count;
 }
 
 int ListChannelModel::rowCount(const QModelIndex &p) const {
@@ -77,6 +77,13 @@ void ListChannelModel::append(const ChannelModelItem &o) {
     endInsertRows();
 }
 
+void ListChannelModel::setCount(int count) {
+    if (m_count == count) return;
+
+    m_count = count;
+    emit countChanged(m_count);
+}
+
 void ListChannelModel::reset() {
     beginResetModel();
     m_data.clear();
@@ -94,6 +101,26 @@ void BrowseChannelModel::addchannelItem(const QString &key, const QString &time,
     model->append(item);
 
     emit modelChanged();
+}
+
+void BrowseChannelModel::clearItems() {
+    if (m_model) {
+        delete m_model;
+    }
+
+    m_model = new ListChannelModel();
+
+    emit modelChanged();
+}
+
+void BrowseChannelModel::clearProperties() {
+    m_id.clear();
+    m_time.clear();
+    m_title.clear();
+    m_subtitle.clear();
+    m_type.clear();
+    m_imageUrl.clear();
+    m_commands.clear();
 }
 
 void BrowseChannelModel::reset() {
