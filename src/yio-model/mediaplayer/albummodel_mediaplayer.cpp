@@ -22,19 +22,22 @@
 
 #include "albummodel_mediaplayer.h"
 
-ListModel::ListModel(QObject *parent) : QAbstractListModel(parent), m_count(0) {}
-
-int ListModel::count() const {
-    return m_count;
+ListModel::ListModel(QObject *parent) :
+    QAbstractListModel(parent)
+{
 }
 
-int ListModel::rowCount(const QModelIndex &p) const {
-    Q_UNUSED(p)
+int ListModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent)
     return m_data.size();
 }
 
-QVariant ListModel::data(const QModelIndex &index, int role) const {
-    if (index.row() < 0 || index.row() >= m_data.count()) return QVariant();
+QVariant ListModel::data(const QModelIndex &index, int role) const
+{
+    if (index.row() < 0 || index.row() >= m_data.count()) {
+        return QVariant();
+    }
     const ModelItem &item = m_data[index.row()];
     switch (role) {
         case KeyRole:
@@ -53,7 +56,8 @@ QVariant ListModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QHash<int, QByteArray> ListModel::roleNames() const {
+QHash<int, QByteArray> ListModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[KeyRole] = "item_key";
     roles[TitleRole] = "item_title";
@@ -64,28 +68,18 @@ QHash<int, QByteArray> ListModel::roleNames() const {
     return roles;
 }
 
-void ListModel::append(const ModelItem &o) {
-    int i = m_data.size();
+void ListModel::append(const ModelItem &modelItem)
+{
+    const int i = m_data.size();
     beginInsertRows(QModelIndex(), i, i);
-    m_data.append(o);
-
-    // Emit changed signals
-    emit countChanged(count());
-
+    m_data.append(modelItem);
     endInsertRows();
-}
-
-void ListModel::setCount(int count) {
-    if (m_count == count) return;
-
-    m_count = count;
-    emit countChanged(m_count);
 }
 
 void BrowseModel::addItem(const QString &key, const QString &title, const QString &subtitle, const QString &type,
                           const QString &imageUrl, const QVariant &commands) {
     ListModel *model = static_cast<ListModel *>(m_model);
-    ModelItem  item = ModelItem(key, title, subtitle, type, imageUrl, commands);
+    const ModelItem item = ModelItem(key, title, subtitle, type, imageUrl, commands);
     model->append(item);
     emit modelChanged();
 }
@@ -100,7 +94,6 @@ void BrowseModel::clearItems()
 
     emit modelChanged();
 }
-
 
 void BrowseModel::clearProperties()
 {

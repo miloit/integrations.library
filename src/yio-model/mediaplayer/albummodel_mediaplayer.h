@@ -28,10 +28,22 @@
 #include <QtDebug>
 
 class ModelItem {
- public:
-    ModelItem(const QString& key, const QString& title, const QString& subtitle, const QString& type,
-              const QString& imageUrl, const QVariant& commands)
-        : m_key(key), m_title(title), m_subtitle(subtitle), m_type(type), m_imageUrl(imageUrl), m_commands(commands) {}
+public:
+    ModelItem(const QString& key,
+              const QString& title,
+              const QString& subtitle,
+              const QString& type,
+              const QString& imageUrl,
+              const QVariant& commands
+              ):
+        m_key(key),
+        m_title(title),
+        m_subtitle(subtitle),
+        m_type(type),
+        m_imageUrl(imageUrl),
+        m_commands(commands)
+    {
+    }
 
     QString  item_key() const { return m_key; }
     QString  item_title() const { return m_title; }
@@ -40,7 +52,7 @@ class ModelItem {
     QString  item_imageUrl() const { return m_imageUrl; }
     QVariant item_commands() const { return m_commands; }
 
- private:
+private:
     QString  m_key;
     QString  m_title;
     QString  m_subtitle;
@@ -50,30 +62,25 @@ class ModelItem {
 };
 
 class ListModel : public QAbstractListModel {
+
     Q_OBJECT
-    Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
 
  public:
     enum SearchRoles { KeyRole = Qt::UserRole + 1, TitleRole, SubTitleRole, TypeRole, ImageUrlRole, CommandsRole };
 
     explicit ListModel(QObject* parent = nullptr);
-    ~ListModel() {}
 
-    int                    count() const;
+    ~ListModel()
+    {
+    }
+
     int                    rowCount(const QModelIndex& p = QModelIndex()) const;
     QVariant               data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void append(const ModelItem& o);
-
- public slots:
-    void setCount(int count);
-
- signals:
-    void countChanged(int count);
+    void append(const ModelItem& parent);
 
  private:
-    int              m_count;
     QList<ModelItem> m_data;
 };
 
@@ -87,22 +94,39 @@ class BrowseModel : public QObject {
     Q_PROPERTY(QObject* model READ model NOTIFY modelChanged)
     Q_PROPERTY(QStringList commands READ commands WRITE setCommands NOTIFY commandsChanged)
 
- public:
-    BrowseModel(QObject* parent = nullptr, const QString& id = "", const QString& title = "",
-                const QString& subtitle = "", const QString& type = "", const QString& imageUrl = "",
-                const QStringList& commands = {})
-        : m_id(id), m_title(title), m_subtitle(subtitle), m_type(type), m_imageUrl(imageUrl), m_commands(commands) {
-        Q_UNUSED(parent)
+public:
+    BrowseModel(QObject* parent = nullptr,
+                const QString& id = QString(),
+                const QString& title = QString(),
+                const QString& subtitle = QString(),
+                const QString& type = QString(),
+                const QString& imageUrl = QString(),
+                const QStringList& commands = {}
+            ) :
+        QObject(parent),
+        m_id(id),
+        m_title(title),
+        m_subtitle(subtitle),
+        m_type(type),
+        m_imageUrl(imageUrl),
+        m_commands(commands)
+    {
     }
-    ~BrowseModel() {}
 
-    QString     id() { return m_id; }
-    QString     title() { return m_title; }
-    QString     subtitle() { return m_subtitle; }
-    QString     type() { return m_type; }
-    QString     imageUrl() { return m_imageUrl; }
-    QObject*    model() { return m_model; }
-    QStringList commands() { return m_commands; }
+    ~BrowseModel()
+    {
+        if (m_model) {
+            delete m_model;
+        }
+    }
+
+    QString     id() const { return m_id; }
+    QString     title() const { return m_title; }
+    QString     subtitle() const { return m_subtitle; }
+    QString     type() const { return m_type; }
+    QString     imageUrl() const { return m_imageUrl; }
+    QObject*    model() const { return m_model; }
+    QStringList commands() const { return m_commands; }
 
     //Since we reuse BrowseModel we need setters
     void setId(const QString &id) { m_id = id; }
